@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BomberLib
 {
-    public class Class1
+    class MapTile
     {
+        public int fieldType = 0;
     }
 }
