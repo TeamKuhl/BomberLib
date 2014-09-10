@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9AF2B88A-DFD3-4B57-9D7F-3D151357EFCF}</ProjectGuid>
+    <ProjectGuid>{36A48511-795E-4EC6-BE15-BCC74EDD3283}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BomberLib</RootNamespace>
@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Server.cs" />
     <Compile Include="ServerConfig.cs" />
     <Compile Include="MapTile.cs" />
     <Compile Include="BomberMap.cs" />
