@@ -9,7 +9,7 @@ using System.Net;
 
 namespace BomberLib
 {
-    class Server
+    public class Server
     {
         // TCP
         private TcpListener tcpListener;
