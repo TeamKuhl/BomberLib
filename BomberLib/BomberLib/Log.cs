@@ -7,7 +7,7 @@ using System.IO;
 
 namespace BomberLib
 {
-    class Log
+    public class Log
     {
         private Boolean usefile, useconsole;
         private Object logLock = new Object();
