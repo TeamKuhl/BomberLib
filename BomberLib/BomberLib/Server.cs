@@ -205,7 +205,7 @@ namespace BomberLib
                 catch
                 {
                     //a socket error has occured
-                    if(loggingEnabled) log.error("a socket error has occured");
+                    if(loggingEnabled) log.error("a socket error has occurred");
                     break;
                 }
 
