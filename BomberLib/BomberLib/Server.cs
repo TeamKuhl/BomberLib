@@ -15,6 +15,15 @@ namespace BomberLib
         private TcpListener tcpListener;
         private Thread listenThread;
         private List<TcpClient> allClients = new List<TcpClient>();
+        private Boolean usefile, useconsole;
+        private Log log;
+
+        public Server(Boolean useconsole, Boolean usefile)
+        {
+            this.useconsole = useconsole;
+            this.usefile = usefile;
+            log = new Log(useconsole, usefile);
+        }
 
         /// <summary>
         ///     Starts the server
@@ -29,6 +38,7 @@ namespace BomberLib
             // set up thread & start the server
             this.listenThread = new Thread(new ThreadStart(ListenForClients));
             this.listenThread.Start();
+            log.info("Server started on port " + port);
 
             return true;
         }
@@ -106,6 +116,7 @@ namespace BomberLib
                 //with connected client
                 Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
                 clientThread.Start(client);
+                log.info("New connection to " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
                 //Console.WriteLine("Connect");
             }
         }
@@ -138,6 +149,7 @@ namespace BomberLib
                 catch
                 {
                     //a socket error has occured
+                    log.error("a socket error has occured");
                     break;
                 }
 
@@ -158,6 +170,7 @@ namespace BomberLib
             this.allClients.Remove(tcpClient);
 
             tcpClient.Close();
+            log.info("the client has disconnected from the server");
             //Console.WriteLine("Disconect");
         }
 
