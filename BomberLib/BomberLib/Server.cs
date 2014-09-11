@@ -12,8 +12,6 @@ namespace BomberLib
 
     /// <summary>
     ///     Server Class for TCP Communication.
-    ///     
-    ///     Written by TeamKuhl
     /// </summary>
     public class Server
     {
@@ -24,13 +22,19 @@ namespace BomberLib
         private Log log;
         private Boolean loggingEnabled;
 
-        // TODO COMMENTS
+        /// <summary>
+        ///     Initialize the server with logging
+        /// </summary>
+        /// <param name="thelog"></param>
         public Server(Log thelog)
         {
             log = thelog;
             loggingEnabled = true;
         }
 
+        /// <summary>
+        ///     Initialize the server without logging
+        /// </summary>
         public Server()
         {
             loggingEnabled = false;
@@ -111,6 +115,7 @@ namespace BomberLib
             }
             return false;
         }
+
         /// <summary>
         ///     Listener for Communication
         /// </summary>
@@ -127,8 +132,8 @@ namespace BomberLib
                 //with connected client
                 Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
                 clientThread.Start(client);
+                // second part = IP of client
                 if(loggingEnabled) log.info("New connection to " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
-                //Console.WriteLine("Connect");
             }
         }
 
@@ -182,7 +187,6 @@ namespace BomberLib
 
             tcpClient.Close();
             if(loggingEnabled) log.info("the client has disconnected from the server");
-            //Console.WriteLine("Disconect");
         }
 
     }

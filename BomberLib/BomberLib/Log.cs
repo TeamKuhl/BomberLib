@@ -7,11 +7,11 @@ using System.IO;
 
 namespace BomberLib
 {
+    /// <summary>
+    ///     Log Class to print to Console or File
+    /// </summary>
     public class Log
     {
-        // TODO more comments :D
-
-
         // warn level
         private int INFO = 0;
         private int WARN = 1;
@@ -26,7 +26,7 @@ namespace BomberLib
         private Boolean outputRedirected;
 
         /// <summary>
-        ///Print the Log to Console
+        ///     Print the Log to Console
         /// </summary>
         /// <param name="useconsole">true = print Log to Console</param>
         /// <param name="usefile">true = print Log to File</param>
@@ -37,12 +37,19 @@ namespace BomberLib
             outputRedirected = ConsoleEx.IsOutputRedirected;
         }
 
-        // TODO comment
+        /// <summary>
+        ///     Check if a log exists otherwise creates one
+        /// </summary>
         private void open()
         {
+            //current date
             string datenow = DateTime.Now.ToString("yyyy-MM-dd");
-            string checkfile = Environment.CurrentDirectory + @"\Log\" + datenow + ".log";
+
+            //check if folder \Log exist, otherwise create it
             if (!Directory.Exists(Environment.CurrentDirectory + @"\Log\")) Directory.CreateDirectory(Environment.CurrentDirectory + @"\Log\");
+
+            //check if current log exists
+            string checkfile = Environment.CurrentDirectory + @"\Log\" + datenow + ".log";
             if (filename == null)
             {
                 filename = checkfile;
@@ -63,7 +70,9 @@ namespace BomberLib
             }
         }
 
-        // TODO comment
+        /// <summary>
+        ///     Close current Logfile
+        /// </summary>
         private void close()
         {
              file.Close();
@@ -126,23 +135,37 @@ namespace BomberLib
             return true;
         }
 
-        // TODO COMMMMMENTS
-
+        /// <summary>
+        ///     Logs an info
+        /// </summary>
+        /// <param name="message">Message to log</param>
         public void info(String message)
         {
             print(message, this.INFO);
         }
 
+        /// <summary>
+        ///     Logs an warning 
+        /// </summary>
+        /// <param name="message">Message to log</param>
         public void warn(String message)
         {
             print(message, this.WARN);
         }
 
+        /// <summary>
+        ///     Logs an error
+        /// </summary>
+        /// <param name="message">Message to log</param>
         public void error(String message)
         {
             print(message, this.ERROR);
         }
 
+        /// <summary>
+        ///     Logs an fatal
+        /// </summary>
+        /// <param name="message">Message to log</param>
         public void fatal(String message)
         {
             print(message, this.FATAL);
