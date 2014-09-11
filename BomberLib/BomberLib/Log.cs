@@ -73,7 +73,7 @@ namespace BomberLib
         /// <summary>
         ///     Close current Logfile
         /// </summary>
-        private void close()
+        public void close()
         {
              file.Close();
         }

@@ -21,6 +21,7 @@ namespace BomberLib
         private List<TcpClient> allClients = new List<TcpClient>();
         private Log log;
         private Boolean loggingEnabled;
+        private Boolean serveractive;
 
         /// <summary>
         ///     Initialize the server with logging
@@ -47,15 +48,44 @@ namespace BomberLib
         /// <returns>Success of start process.</returns>
         public Boolean start(int port)
         {
-            // set up tcp listener
-            this.tcpListener = new TcpListener(IPAddress.Any, port);
+            if (!serveractive)
+            {
+                serveractive = true;
 
-            // set up thread & start the server
-            this.listenThread = new Thread(new ThreadStart(ListenForClients));
-            this.listenThread.Start();
-            if(loggingEnabled) log.info("Server started on port " + port);
+                // set up tcp listener
+                this.tcpListener = new TcpListener(IPAddress.Any, port);
 
-            return true;
+                // set up thread & start the server
+                this.listenThread = new Thread(new ThreadStart(ListenForClients));
+                this.listenThread.Start();
+                if (loggingEnabled) log.info("Server started on port " + port);
+                return true;
+            }
+            else
+            {
+                if (loggingEnabled) log.error("Server is already running");
+                return false;
+            }
+        }
+
+        /// <summary>
+        ///     Stops the Server
+        /// </summary>
+        /// <returns></returns>
+        public Boolean stop()
+        {
+            if (serveractive)
+            {
+                serveractive = false;
+                if (loggingEnabled) log.warn("Server is going to stop");
+                this.tcpListener.Stop();
+                return true;
+            }
+            else
+            {
+                if (loggingEnabled) log.error("Server is not running");
+                return false;
+            }
         }
 
         /// <summary>
@@ -121,19 +151,29 @@ namespace BomberLib
         /// </summary>
         private void ListenForClients()
         {
-            this.tcpListener.Start();
+            if(serveractive) this.tcpListener.Start();
 
-            while (true)
+            while (serveractive)
             {
-                //blocks until a client has connected to the server
-                TcpClient client = this.tcpListener.AcceptTcpClient();
-
-                //create a thread to handle communication 
-                //with connected client
                 Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
-                clientThread.Start(client);
-                // second part = IP of client
-                if(loggingEnabled) log.info("New connection to " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+
+                //getting error when waiting for client while server is already closed
+                try
+                {
+
+                    //blocks until a client has connected to the server
+                    TcpClient client = this.tcpListener.AcceptTcpClient();
+
+                    //create a thread to handle communication 
+                    //with connected client
+                    clientThread.Start(client);
+                    // second part = IP of client
+                    if (loggingEnabled) log.info("New connection to " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+                }
+                catch (Exception e)
+                {
+                    if (loggingEnabled) log.warn("Server stopped");
+                }
             }
         }
 

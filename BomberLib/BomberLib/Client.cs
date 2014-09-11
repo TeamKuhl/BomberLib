@@ -43,7 +43,7 @@ namespace BomberLib
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //Console.WriteLine(e.Message);
                 return false;
