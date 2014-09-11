@@ -9,20 +9,31 @@ using System.Net;
 
 namespace BomberLib
 {
+
+    /// <summary>
+    ///     Server Class for TCP Communication.
+    ///     
+    ///     Written by TeamKuhl
+    /// </summary>
     public class Server
     {
         // TCP
         private TcpListener tcpListener;
         private Thread listenThread;
         private List<TcpClient> allClients = new List<TcpClient>();
-        private Boolean usefile, useconsole;
         private Log log;
+        private Boolean loggingEnabled;
 
-        public Server(Boolean useconsole, Boolean usefile)
+        // TODO COMMENTS
+        public Server(Log thelog)
         {
-            this.useconsole = useconsole;
-            this.usefile = usefile;
-            log = new Log(useconsole, usefile);
+            log = thelog;
+            loggingEnabled = true;
+        }
+
+        public Server()
+        {
+            loggingEnabled = false;
         }
 
         /// <summary>
@@ -38,7 +49,7 @@ namespace BomberLib
             // set up thread & start the server
             this.listenThread = new Thread(new ThreadStart(ListenForClients));
             this.listenThread.Start();
-            log.info("Server started on port " + port);
+            if(loggingEnabled) log.info("Server started on port " + port);
 
             return true;
         }
@@ -116,7 +127,7 @@ namespace BomberLib
                 //with connected client
                 Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
                 clientThread.Start(client);
-                log.info("New connection to " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+                if(loggingEnabled) log.info("New connection to " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
                 //Console.WriteLine("Connect");
             }
         }
@@ -149,7 +160,7 @@ namespace BomberLib
                 catch
                 {
                     //a socket error has occured
-                    log.error("a socket error has occured");
+                    if(loggingEnabled) log.error("a socket error has occured");
                     break;
                 }
 
@@ -170,7 +181,7 @@ namespace BomberLib
             this.allClients.Remove(tcpClient);
 
             tcpClient.Close();
-            log.info("the client has disconnected from the server");
+            if(loggingEnabled) log.info("the client has disconnected from the server");
             //Console.WriteLine("Disconect");
         }
 
