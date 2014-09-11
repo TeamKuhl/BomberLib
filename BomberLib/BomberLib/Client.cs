@@ -48,8 +48,16 @@ namespace BomberLib
                 //Console.WriteLine(e.Message);
                 return false;
             }
+        }
 
-
+        /// <summary>
+        ///     Disconnect from the Server
+        /// </summary>
+        /// <returns></returns>
+        public Boolean disconnect()
+        {
+            client.Close();
+            return true;
         }
 
         /// <summary>
