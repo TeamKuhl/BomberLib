@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Threading;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace BomberLib
 {
