@@ -90,12 +90,27 @@ namespace BomberLib
         }
 
         /// <summary>
-        ///     Sends data to a client
+        ///     Converts object to string and send to client
+        /// </summary>
+        /// <param name="client">The client to send the object to.</param>
+        /// <param name="data">The object to send.</param>
+        /// <returns></returns>
+        public Boolean send(TcpClient client, Object data)
+        {
+            // convert to json
+            string json = JsonConvert.SerializeObject(data);
+
+            // send to client
+            return this.sendString(client, json);
+        }
+
+        /// <summary>
+        ///     Sends string to a client
         /// </summary>
         /// <param name="client">The client to send the message to.</param>
         /// <param name="message">The message to send.</param>
         /// <returns>Success of send process.</returns>
-        public Boolean send(TcpClient client, String message)
+        private Boolean sendString(TcpClient client, String message)
         {
             // get client stream
             NetworkStream clientStream = client.GetStream();
@@ -112,7 +127,7 @@ namespace BomberLib
         }
 
         /// <summary>
-        ///     Send data to all clients
+        ///     Send data object to all clients
         /// </summary>
         /// <param name="message">The message to send.</param>
         /// <returns>Success of send process.</returns>

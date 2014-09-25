@@ -62,11 +62,25 @@ namespace BomberLib
         }
 
         /// <summary>
-        ///     Sends message to server
+        ///     Converts the object to JSON and sends it to server
+        /// </summary>
+        /// <param name="data">Data object</param>
+        /// <returns></returns>
+        public Boolean send(Object data)
+        {
+            // convert to string
+            string json = JsonConvert.SerializeObject(data);
+
+            // send to server
+            return this.sendString(json);
+        }
+
+        /// <summary>
+        ///     Sends plain string to server
         /// </summary>
         /// <param name="message">The message to send to the server</param>
         /// <returns></returns>
-        public Boolean send(String message)
+        private Boolean sendString(String message)
         {
 
             // encode message
