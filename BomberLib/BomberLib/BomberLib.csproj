@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommunicationLibrary">
+      <HintPath>..\..\..\CommunicationLibrary\bin\Release\CommunicationLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -42,14 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
     <Compile Include="ConsoleEx.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="Log.cs" />
-    <Compile Include="Server.cs" />
-    <Compile Include="ServerConfig.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="MapTile.cs" />
     <Compile Include="BomberMap.cs" />
-    <Compile Include="ClientConfig.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
