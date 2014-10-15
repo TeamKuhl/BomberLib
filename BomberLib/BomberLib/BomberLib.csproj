@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommunicationLibrary">
-      <HintPath>..\..\..\CommunicationLibrary\bin\Release\CommunicationLibrary.dll</HintPath>
+      <HintPath>..\..\..\CommunicationLibrary\bin\Debug\CommunicationLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>lib\Newtonsoft.Json.dll</HintPath>
@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleEx.cs" />
+    <Compile Include="Communication.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Config.cs" />

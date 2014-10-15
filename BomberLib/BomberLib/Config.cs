@@ -16,6 +16,8 @@ namespace BomberLib
         /// </summary>
         public Config()
         {
+            // testing
+            this.set("server-port", "45454");
             // this.initialize();
         }
 

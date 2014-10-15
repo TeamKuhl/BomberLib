@@ -7,10 +7,8 @@ using CommunicationLibrary;
 
 namespace BomberLib
 {
-    class Game
+    public class Game
     {
-        
-
         public Boolean start()
         {
             // load config
@@ -21,11 +19,15 @@ namespace BomberLib
 
             // create server
             Server server = new Server();
-
+            
             // start server
-            server.start(Convert.ToInt32(config.get("server-port")));
+            server.start(45454);
 
-            return false;
+            // create communication object
+            Communication com = new Communication(server);
+                        
+            return true;
         }
+        
     }
 }
