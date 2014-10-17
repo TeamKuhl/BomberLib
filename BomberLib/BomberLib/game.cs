@@ -25,6 +25,9 @@ namespace BomberLib
 
             // create communication object
             Communication com = new Communication(server);
+
+            // create playerhandler
+            PlayerHandler ph = new PlayerHandler(com);
                         
             return true;
         }

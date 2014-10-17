@@ -9,24 +9,29 @@ using System.Net.Sockets;
 namespace BomberLib
 {
     // message events
-    public delegate void ComMessageHandler         (TcpClient client, String message);
+    public delegate void ComMessageHandler(TcpClient client, String message);
+
+    // connection events
+    public delegate void ComConnectionHandler(TcpClient client);
 
     // unknown type event
-    public delegate void ComUnknownTypeHandler     (TcpClient client, String type, String message);
+    public delegate void ComUnknownTypeHandler(TcpClient client, String type, String message);
 
 
-    class Communication
+    public class Communication
     {
-        public ComMessageHandler        onPlayerInfo;
+        public ComConnectionHandler onDisconnect;
 
-        public ComMessageHandler              onMove;
-        public ComMessageHandler       onChatMessage;
-        public ComMessageHandler           onCommand;
-        public ComMessageHandler         onBombPlace;
-        public ComMessageHandler           onItemUse;
+        public ComMessageHandler onPlayerInfo;
+
+        public ComMessageHandler onMove;
+        public ComMessageHandler onChatMessage;
+        public ComMessageHandler onCommand;
+        public ComMessageHandler onBombPlace;
+        public ComMessageHandler onItemUse;
 
         // else
-        public ComUnknownTypeHandler    onUnknownType;
+        public ComUnknownTypeHandler onUnknownType;
 
         // declaration
         private Server server;
@@ -40,7 +45,8 @@ namespace BomberLib
             this.server = s;
 
             // listen to server events
-            server.onReceive    +=  new ServerReceiveHandler(ReceiveMessageHandler);
+            server.onReceive += new ServerReceiveHandler(ReceiveMessageHandler);
+            server.onDisconnect += new ServerDisconnectHandler(DisconnectHandler);
         }
 
         /// <summary>
@@ -52,32 +58,50 @@ namespace BomberLib
         private void ReceiveMessageHandler(TcpClient client, String type, String message)
         {
             // switch types
-            switch(type)
+            switch (type)
             {
                 case "PlayerInfo":
-                    onPlayerInfo(client, message);
+                    if (onPlayerInfo != null) onPlayerInfo(client, message);
                     break;
                 case "ChatMessage":
-                    onChatMessage(client, message);
+                    if (onChatMessage != null) onChatMessage(client, message);
                     break;
                 case "Command":
-                    onCommand(client, message);
+                    if (onCommand != null) onCommand(client, message);
                     break;
                 case "BombPlace":
-                    onBombPlace(client, message);
+                    if (onBombPlace != null) onBombPlace(client, message);
                     break;
                 case "ItemUse":
-                    onItemUse(client, message);
+                    if (onItemUse != null) onItemUse(client, message);
                     break;
                 case "Move":
-                    onMove(client, message);
+                    if (onMove != null) onMove(client, message);
                     break;
                 default:
-                    onUnknownType(client, type, message);
+                    if (onUnknownType != null) onUnknownType(client, type, message);
                     break;
             }
         }
 
+        public void DisconnectHandler(TcpClient client)
+        {
+            if (onDisconnect != null) onDisconnect(client);
+        }
 
+        public void sendToAll(string type, string message)
+        {
+            server.sendToAll(type, message);
+        }
+
+        public void send(TcpClient client, string type, string message)
+        {
+            server.send(client, type, message);
+        }
+
+        public void sendToAllExcept(TcpClient client, string type, string message)
+        {
+            server.sendToAllExcept(client, type, message);
+        }
     }
 }

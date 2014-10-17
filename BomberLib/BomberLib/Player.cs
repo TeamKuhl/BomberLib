@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Sockets;
 
 namespace BomberLib
 {
     class Player
     {
+        public TcpClient client;
         public string name = "";
         public int socketID = 0;
         /*public string imgHash = "";
@@ -18,9 +20,10 @@ namespace BomberLib
         public int bombSize = 1;
         public double speed = 1.0;*/
 
-        public Player(int socketHashCode)
+        public Player(String PlayerName, TcpClient PlayerConnection)
         {
-            this.socketID = socketHashCode;
+            this.name = PlayerName;
+            this.client = PlayerConnection;
         }
 
 
