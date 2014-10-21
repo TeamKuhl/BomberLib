@@ -8,6 +8,15 @@ namespace BomberLib
 {
     class MapTile
     {
-        public int fieldType = 0;
+        public int type = 0;
+        public int x, y;
+
+        public MapTile(int fieldType, int row, int tile)
+        {
+            // set vars
+            this.type = fieldType;
+            this.x = tile;
+            this.y = row;
+        }
     }
 }

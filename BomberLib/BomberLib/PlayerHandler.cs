@@ -23,6 +23,11 @@ namespace BomberLib
             
         }
 
+        /// <summary>
+        ///     Handler for join events
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
         public void JoinHandler(TcpClient client, String message)
         {
             this.players[client.Client.GetHashCode()] = new Player(message, client);
@@ -30,6 +35,10 @@ namespace BomberLib
             Console.WriteLine("Player "+message+" connected [#"+client.Client.GetHashCode()+"]");
         }
 
+        /// <summary>
+        ///  Handler for leave events
+        /// </summary>
+        /// <param name="client"></param>
         public void LeaveHandler(TcpClient client)
         {
             int SocketID = client.Client.GetHashCode();
@@ -40,6 +49,11 @@ namespace BomberLib
                 this.com.sendToAllExcept(client, "leave", players[SocketID].name);
                 players.Remove(SocketID);
             }
+        }
+
+        public Player getPlayerByHashcode(int hashCode)
+        {
+            return players[hashCode];
         }
 
     }

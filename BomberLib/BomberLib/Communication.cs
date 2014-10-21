@@ -29,6 +29,7 @@ namespace BomberLib
         public ComMessageHandler onCommand;
         public ComMessageHandler onBombPlace;
         public ComMessageHandler onItemUse;
+        public ComMessageHandler onGetMap;
 
         // else
         public ComUnknownTypeHandler onUnknownType;
@@ -77,6 +78,9 @@ namespace BomberLib
                     break;
                 case "Move":
                     if (onMove != null) onMove(client, message);
+                    break;
+                case "GetMap":
+                    if (onGetMap != null) onGetMap(client, message);
                     break;
                 default:
                     if (onUnknownType != null) onUnknownType(client, type, message);

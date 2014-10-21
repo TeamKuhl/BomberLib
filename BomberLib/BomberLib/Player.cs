@@ -7,7 +7,7 @@ using System.Net.Sockets;
 
 namespace BomberLib
 {
-    class Player
+    public class Player
     {
         public TcpClient client;
         public string name = "";

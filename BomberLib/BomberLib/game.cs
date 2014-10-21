@@ -9,26 +9,54 @@ namespace BomberLib
 {
     public class Game
     {
+        // declaration
+        Config config;
+        BomberMap bomberMap;
+        Server server;
+        Communication com;
+        PlayerHandler ph;
+        Chat chat;
+
+        /// <summary>
+        ///     Starts the server
+        /// </summary>
+        /// <returns>Success state of game start, mainly communication.</returns>
         public Boolean start()
         {
             // load config
-            Config config = new Config();
-
-            // load map
-            BomberMap bomberMap = new BomberMap();
+            config = new Config();
 
             // create server
-            Server server = new Server();
+            server = new Server();
             
             // start server
-            server.start(45454);
+            server.start(45454); // TODO Port from Config
+
+            // output
+            Console.WriteLine("Server started, listening on port " + 45454);
 
             // create communication object
-            Communication com = new Communication(server);
+            com = new Communication(server);
+
+            // load map
+            bomberMap = new BomberMap("bomberMap", com); // TODO Map name from config
 
             // create playerhandler
-            PlayerHandler ph = new PlayerHandler(com);
+             ph = new PlayerHandler(com);
+
+            // start chat 
+            chat = new Chat(com, ph);
+
+            // start new round
+            this.newRound();
                         
+            return true;
+        }
+
+        public Boolean newRound()
+        {
+
+
             return true;
         }
         
