@@ -31,7 +31,7 @@ namespace BomberLib
         public void JoinHandler(TcpClient client, String message)
         {
             this.players[client.Client.GetHashCode()] = new Player(message, client);
-            this.com.sendToAll("join", message);
+            this.com.sendToAll("Join", message);
             Console.WriteLine("Player "+message+" connected [#"+client.Client.GetHashCode()+"]");
         }
 
@@ -46,7 +46,7 @@ namespace BomberLib
             if (players[SocketID] != null)
             {
                 Console.WriteLine("Player " + players[SocketID].name + " disconnected [#" + SocketID + "]");
-                this.com.sendToAllExcept(client, "leave", players[SocketID].name);
+                this.com.sendToAllExcept(client, "Leave", players[SocketID].name);
                 players.Remove(SocketID);
             }
         }
