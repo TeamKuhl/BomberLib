@@ -43,7 +43,7 @@ namespace BomberLib
         {
             int SocketID = client.Client.GetHashCode();
 
-            if (players[SocketID] != null)
+            if (players.ContainsKey(SocketID))
             {
                 Console.WriteLine("Player " + players[SocketID].name + " disconnected [#" + SocketID + "]");
                 this.com.sendToAllExcept(client, "Leave", players[SocketID].name);
