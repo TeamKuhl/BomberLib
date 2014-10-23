@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Collections;
+using System.Threading;
 
 namespace BomberLib
 {
@@ -33,8 +34,9 @@ namespace BomberLib
         public void JoinHandler(TcpClient client, String message)
         {
             this.players[client.Client.GetHashCode()] = new Player(message, client, com);
+            this.com.sendToAll("Join", Convert.ToString(client.Client.GetHashCode()) + ":" + message);
+            Thread.Sleep(1000);
             this.players[client.Client.GetHashCode()].setPosition(2, 2);
-            this.com.sendToAll("Join", Convert.ToString(client.Client.GetHashCode())+":"+message);
             Console.WriteLine("Player "+message+" connected [#"+client.Client.GetHashCode()+"]");
         }
 

@@ -86,7 +86,7 @@ namespace BomberLib
             // get spawn positions for players
             List<string> spawnPositions = this.bomberMap.getSpawnPositions(playerCount);
 
-            // get all players
+            // get all players  
             Dictionary<int, Player> allPlayers = this.ph.getAllPlayers();
 
             // counter for IENumerable 
@@ -156,10 +156,12 @@ namespace BomberLib
                     // move
                     this.ph.players[id].setPosition(newx, newy);
 
-                    if (this.bomberMap.MapTiles[newy][newx].type == 2) this.bomberMap.MapTiles[newy][newx].type = 1;
-                    else if (this.bomberMap.MapTiles[newy][newx].type == 1) this.bomberMap.MapTiles[newy][newx].type = 2;
-                    //Thread.Sleep(50);
-                    this.bomberMap.sendMapToAll();
+                    if (this.bomberMap.MapTiles[newy][newx].type == 2)
+                    {
+                        this.bomberMap.MapTiles[newy][newx].type = 1;
+                        //else if (this.bomberMap.MapTiles[newy][newx].type == 1) this.bomberMap.MapTiles[newy][newx].type = 2;
+                        this.bomberMap.sendMapToAll();
+                    }
                 }
             }
         }
