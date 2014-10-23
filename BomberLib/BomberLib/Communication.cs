@@ -20,16 +20,17 @@ namespace BomberLib
 
     public class Communication
     {
+        // events
         public ComConnectionHandler onDisconnect;
-
         public ComMessageHandler onPlayerInfo;
-
         public ComMessageHandler onMove;
         public ComMessageHandler onChatMessage;
         public ComMessageHandler onCommand;
         public ComMessageHandler onBombPlace;
         public ComMessageHandler onItemUse;
         public ComMessageHandler onGetMap;
+        public ComMessageHandler onGetPlayerPosition;
+        public ComMessageHandler onGetPlayerList;
 
         // else
         public ComUnknownTypeHandler onUnknownType;
@@ -58,7 +59,7 @@ namespace BomberLib
         /// <param name="message">message</param>
         private void ReceiveMessageHandler(TcpClient client, String type, String message)
         {
-            // switch types
+            // switch types & call events
             switch (type)
             {
                 case "PlayerInfo":
@@ -82,29 +83,59 @@ namespace BomberLib
                 case "GetMap":
                     if (onGetMap != null) onGetMap(client, message);
                     break;
+                case "GetPlayerPosition":
+                    if (onGetPlayerPosition != null) onGetPlayerPosition(client, message);
+                    break;
+                case "GetPlayerList":
+                    if (onGetPlayerList != null) onGetPlayerList(client, message);
+                    break;
                 default:
                     if (onUnknownType != null) onUnknownType(client, type, message);
                     break;
             }
         }
 
+        /// <summary>
+        ///     Handler for player disconnects 
+        /// </summary>
+        /// <param name="client"></param>
         public void DisconnectHandler(TcpClient client)
         {
             if (onDisconnect != null) onDisconnect(client);
         }
 
+        /// <summary>
+        ///     send message to all
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="message"></param>
         public void sendToAll(string type, string message)
         {
+            // use communication library 
             server.sendToAll(type, message);
         }
 
+        /// <summary>
+        ///     send message to a client
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="type"></param>
+        /// <param name="message"></param>
         public void send(TcpClient client, string type, string message)
         {
+            // use communication library 
             server.send(client, type, message);
         }
 
+        /// <summary>
+        ///     send message to all clients except one
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="type"></param>
+        /// <param name="message"></param>
         public void sendToAllExcept(TcpClient client, string type, string message)
         {
+            // use communication library 
             server.sendToAllExcept(client, type, message);
         }
     }

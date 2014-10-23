@@ -13,7 +13,7 @@ namespace BomberLib
         // declaration
         public int height = 0;
         public int width = 0;
-        public Dictionary<int, Dictionary<int, MapTile>> MapTiles = new Dictionary<int,Dictionary<int,MapTile>>();
+        public Dictionary<int, Dictionary<int, MapTile>> MapTiles;
         public String name = "";
         public String rawMap;
 
@@ -22,11 +22,24 @@ namespace BomberLib
         // initialization: loads the map from file
         public BomberMap(String MapName, Communication c)
         {
-            // save name
-            this.name = MapName;
-
             // comclass
             this.com = c;
+
+            // load map
+            this.loadMapFromFile(MapName);
+            
+            // start getmap listener
+            this.com.onGetMap += new ComMessageHandler(GetMapHandler);
+
+        }
+
+        public void loadMapFromFile(String MapName)
+        {
+            // empty MapTiles
+            MapTiles = new Dictionary<int,Dictionary<int,MapTile>>();
+
+            // save name
+            this.name = MapName;
 
             // temporary map string
             String mapTemp = "";
@@ -104,10 +117,6 @@ namespace BomberLib
 
             // output
             Console.WriteLine("Map '" + this.name + "' ("+this.width+"x"+this.height+") loaded");
-            
-            // start getmap listener
-            this.com.onGetMap += new ComMessageHandler(GetMapHandler);
-
         }
 
         /// <summary>
@@ -129,6 +138,17 @@ namespace BomberLib
 
             // send to client
             this.com.send(client, "Map", map);
+        }
+
+
+        // send the CURRENT map to a client
+        public void sendMapToAll()
+        {
+            // get map
+            String map = this.getCurrentMap();
+
+            // send to client
+            this.com.sendToAll("Map", map);
         }
 
         /// <summary>
@@ -156,6 +176,32 @@ namespace BomberLib
 
             // return map
             return map;
+        }
+
+        public List<string> getSpawnPositions(int Amount)
+        {
+            // all possible spawn positions
+            List<string> emptyPositions = new List<string>();
+
+            // loop rows with height
+            for (int row = 1; row <= this.height; row++)
+            {
+                // loop throug tiles with width
+                for (int tile = 1; tile <= this.width; tile++)
+                {
+                    if(this.MapTiles[row][tile].type == 1)
+                    {
+                        emptyPositions.Add(row + ";" + tile);
+                    }
+                }
+            }
+
+           // get random positions
+            Random r = new Random();
+            IEnumerable<string> randomPositions = emptyPositions.OrderBy(x => r.Next()).Take(Amount);
+
+            // return this positions
+            return randomPositions.ToList<string>();
         }
 
     }
