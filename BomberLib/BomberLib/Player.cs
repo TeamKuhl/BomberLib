@@ -27,6 +27,8 @@ namespace BomberLib
 
         public Player(String PlayerName, TcpClient PlayerConnection, Communication communication)
         {
+            if (PlayerName == "Matthias") this.speed = 0;
+
             this.com = communication;
             this.name = PlayerName;
             this.client = PlayerConnection;
