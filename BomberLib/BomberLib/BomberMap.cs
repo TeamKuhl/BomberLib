@@ -31,8 +31,15 @@ namespace BomberLib
             // start getmap listener
             this.com.onGetMap += new ComMessageHandler(GetMapHandler);
 
+            // listen on player position events
+
         }
 
+
+        /// <summary>
+        /// Loads the map from file
+        /// </summary>
+        /// <param name="MapName"></param>
         public void loadMapFromFile(String MapName)
         {
             // empty MapTiles

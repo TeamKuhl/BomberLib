@@ -17,6 +17,7 @@ namespace BomberLib
         Communication com;
         PlayerHandler ph;
         Chat chat;
+        BombHandler bombHandler;
 
         /// <summary>
         ///     Starts the server
@@ -105,13 +106,24 @@ namespace BomberLib
                 counter++;
             }
 
+            // bombhandler
+            this.bombHandler = new BombHandler(com);
+
+            // listen for bombexplosions
+            this.bombHandler.onBombExplosion += new BombExplosionHandler(BombExplosionHandler);
+
+            // listen for bomb place
+            this.com.onBombPlace += new ComMessageHandler(BombPlaceHandler);
+
             // listen for move events
             this.com.onMove += new ComMessageHandler(MoveHandler);
 
             return true;
         }
 
-        // HANDLER
+        // ==================
+        // GAME EVENT HANDLER
+        // ==================
 
         /// <summary>
         /// Handler for move events
@@ -151,19 +163,127 @@ namespace BomberLib
             if (newx > 0 && newy > 0 && newy <= this.bomberMap.height && newx <= this.bomberMap.width )
             {
                 // check maptile type from bombermap
-                if (this.bomberMap.MapTiles[newy][newx].type != 0)
+                if (this.bomberMap.MapTiles[newy][newx].type == 1)
                 {
-                    // move
-                    this.ph.players[id].setPosition(newx, newy);
-
-                    if (this.bomberMap.MapTiles[newy][newx].type == 2)
+                    // check if there is a player
+                    if (!this.ph.isPlayerOnPosition(newx, newy))
                     {
-                        this.bomberMap.MapTiles[newy][newx].type = 1;
-                        //else if (this.bomberMap.MapTiles[newy][newx].type == 1) this.bomberMap.MapTiles[newy][newx].type = 2;
-                        this.bomberMap.sendMapToAll();
+                        // check for bomb
+                        if (!this.bombHandler.isBombAtPosition(newx, newy))
+                        {
+                            // move
+                            if (this.ph.players[id].setPosition(newx, newy))
+                            {
+                                // do actions yeah
+                            }
+                        }
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// handles bomb explosions
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="size"></param>
+        public void BombExplosionHandler(int X, int Y, int size)
+        {
+            // bomb location
+            if (ph.isPlayerOnPosition(X, Y))
+            {
+                Player p = ph.getPlayerOnPosition(X, Y);
+                p.die();
+            }
+
+            // explosion locations (starting with X,Y)
+            String locations = X + ":" + Y + ";";
+
+            // loop bomb positions
+            for (int g = 1; g <= 4; g++)
+            {
+
+                // loop size
+                for(int i = 1; i<=size; i++)
+                {
+                    // calculate explosion positions
+                    int locX = X;
+                    int locY = Y;
+
+                    // all 4 directions
+                    switch(g)
+                    {
+                        case 1:
+                            locY = Y - i;
+                            break;
+                        case 2:
+                            locX = X + i;
+                            break;
+                        case 3:
+                            locY = Y + i;
+                            break;
+                        case 4:
+                            locX = X - i;
+                            break;
+                    }
+
+                    if (this.bomberMap.MapTiles.ContainsKey(locY) && this.bomberMap.MapTiles[locY].ContainsKey(locX))
+                    {
+
+                        // check if wall, Karol <3
+                        Boolean NichtIstWand = true;
+
+                        // tiletypes
+                        switch (this.bomberMap.MapTiles[locY][locX].type)
+                        {
+                            case 0:
+                                // wall
+                                NichtIstWand = false;
+                                break;
+                            case 1:
+                                // add to exploded locations
+                                locations += locX + ":" + locY + ";";
+
+                                // check for player
+                                if (ph.isPlayerOnPosition(locX, locY))
+                                {
+                                    Player p = ph.getPlayerOnPosition(locX, locY);
+                                    p.die();
+                                }
+                                break;
+                            case 2:
+                                // add to exploded locations
+                                locations += locX + ":" + locY + ";";
+
+                                // breakable
+                                this.bomberMap.MapTiles[locY][locX].type = 1;
+                                this.bomberMap.sendMapToAll();
+                                break;
+                        }
+
+                        if (!NichtIstWand) break;
+                    }
+                }
+            }
+
+            // send exploded locations to all clients
+            this.com.sendToAll("BombExploded", locations);
+        }
+
+        /// <summary>
+        /// Handles bomb place events
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
+        public void BombPlaceHandler(TcpClient client, String message)
+        {
+            // get player
+            Player p = this.ph.getPlayerByHashcode(client.Client.GetHashCode());
+
+            // place bomb
+            this.bombHandler.placeBomb(p.size, p.time, p.X, p.Y);
+            
         }
         
     }

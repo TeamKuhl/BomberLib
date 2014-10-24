@@ -10,6 +10,8 @@ namespace BomberLib
     {
         public int type = 0;
         public int x, y;
+        public bool isPlayer = false;
+        public bool isBomb   = false;
 
         public MapTile(int fieldType, int row, int tile)
         {

@@ -9,6 +9,9 @@ using System.Threading;
 
 namespace BomberLib
 {
+    // bomberlib events
+    public delegate void PlayerChangedPositionHandler(int PlayerID, String PlayerName, int X, int Y);
+
     public class PlayerHandler
     {
         private Communication com;
@@ -121,6 +124,52 @@ namespace BomberLib
         public Dictionary<int, Player> getAllPlayers()
         {
             return players;
+        }
+
+        /// <summary>
+        /// Check if there is a player on this position
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <returns></returns>
+        public Boolean isPlayerOnPosition(int X, int Y)
+        {
+            // return boolean
+            Boolean isPlayer = false;
+
+            // loop all players
+            foreach(KeyValuePair<int, Player> p in this.players)
+            {
+                // check if player is on position
+                if(p.Value.X == X && p.Value.Y == Y)
+                {
+                    // there IS a player
+                    isPlayer = true;
+                }
+            }
+
+            // return boolean
+            return isPlayer;
+        }
+
+        /// <summary>
+        /// get the player on a position, USE "isPlayerOnPosition" BEFORE YOU USE THIS
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <returns></returns>
+        public Player getPlayerOnPosition(int X, int Y)
+        {
+            // loop all players
+            foreach (KeyValuePair<int, Player> p in this.players)
+            {
+                // check if player is on position
+                if (p.Value.X == X && p.Value.Y == Y)
+                {
+                    return p.Value;
+                }
+            }
+            return null;
         }
     }
 }

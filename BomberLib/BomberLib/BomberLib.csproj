@@ -32,7 +32,7 @@
   <ItemGroup>
     <Reference Include="CommunicationLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\CommunicationLibrary.dll</HintPath>
+      <HintPath>..\..\..\CommunicationLibrary\bin\Debug\CommunicationLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>lib\Newtonsoft.Json.dll</HintPath>
@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bomb.cs" />
+    <Compile Include="BombHandler.cs" />
     <Compile Include="Chat.cs" />
     <Compile Include="ConsoleEx.cs" />
     <Compile Include="Communication.cs" />
