@@ -19,6 +19,9 @@ namespace BomberLib
         Chat chat;
         BombHandler bombHandler;
 
+        // game variables
+        int roundStatus = 0;
+
         /// <summary>
         ///     Starts the server
         /// </summary>
@@ -63,7 +66,7 @@ namespace BomberLib
             Console.WriteLine("Waiting for enough players to start a new round.");
 
             // wait for new round
-            while (this.ph.getWaitingPlayerCount() < 1) { } // TODO Minplayers from config
+            while (this.ph.getTotalPlayerCount() < 1) { } // TODO Minplayers from config
             
             // start round
             this.newRound();
@@ -75,14 +78,15 @@ namespace BomberLib
         /// <returns></returns>
         public Boolean newRound()
         {
+            // round status update
+            this.roundStatus = 1;
+            this.com.sendToAll("RoundStatus", this.roundStatus.ToString());
+
             // output
             Console.WriteLine("New round started. Spawning players.");
 
             // how many players?
             int playerCount = this.ph.getTotalPlayerCount();
-
-            // tell all what happens
-            this.com.sendToAll("NewRoundStart", Convert.ToString(playerCount));
 
             // get spawn positions for players
             List<string> spawnPositions = this.bomberMap.getSpawnPositions(playerCount);
@@ -140,46 +144,51 @@ namespace BomberLib
             // get player id
             int id = client.Client.GetHashCode();
 
-            // new player coordinates
-            int changex = 0;
-            int changey = 0;
-
-            // types
-            switch (message)
+            // no move of death
+            if (this.ph.players[id].status == 1)
             {
-                case "n":
-                    changey = -1;
-                    break;
-                case "e":
-                    changex = 1;
-                    break;
-                case "s":
-                    changey = 1;
-                    break;
-                case "w":
-                    changex = -1;
-                    break;
-            }
-            
-            // positions
-            int newx = this.ph.players[id].X + changex;
-            int newy = this.ph.players[id].Y + changey;
 
-            if (newx > 0 && newy > 0 && newy <= this.bomberMap.height && newx <= this.bomberMap.width )
-            {
-                // check maptile type from bombermap
-                if (this.bomberMap.MapTiles[newy][newx].type == 1)
+                // new player coordinates
+                int changex = 0;
+                int changey = 0;
+
+                // types
+                switch (message)
                 {
-                    // check if there is a player
-                    if (!this.ph.isPlayerOnPosition(newx, newy))
+                    case "n":
+                        changey = -1;
+                        break;
+                    case "e":
+                        changex = 1;
+                        break;
+                    case "s":
+                        changey = 1;
+                        break;
+                    case "w":
+                        changex = -1;
+                        break;
+                }
+
+                // positions
+                int newx = this.ph.players[id].X + changex;
+                int newy = this.ph.players[id].Y + changey;
+
+                if (newx > 0 && newy > 0 && newy <= this.bomberMap.height && newx <= this.bomberMap.width)
+                {
+                    // check maptile type from bombermap
+                    if (this.bomberMap.MapTiles[newy][newx].type == 1)
                     {
-                        // check for bomb
-                        if (!this.bombHandler.isBombAtPosition(newx, newy))
+                        // check if there is a player
+                        if (!this.ph.isPlayerOnPosition(newx, newy) || this.ph.getPlayerOnPosition(newx, newy).status != 1)
                         {
-                            // move
-                            if (this.ph.players[id].setPosition(newx, newy))
+                            // check for bomb
+                            if (!this.bombHandler.isBombAtPosition(newx, newy))
                             {
-                                // do actions yeah
+                                // move
+                                if (this.ph.players[id].setPosition(newx, newy))
+                                {
+                                    // do actions yeah
+                                }
                             }
                         }
                     }
@@ -293,6 +302,16 @@ namespace BomberLib
             // place bomb
             this.bombHandler.placeBomb(p.size, p.time, p.X, p.Y);
             
+        }
+
+        /// <summary>
+        /// Handles roundStatus requests
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
+        public void GetRoundStatusHandler(TcpClient client, String message)
+        {
+            this.com.send(client, "RoundStatus", this.roundStatus.ToString());
         }
         
     }

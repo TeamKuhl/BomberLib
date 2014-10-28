@@ -41,7 +41,7 @@ namespace BomberLib
             // create player
             this.players[client.Client.GetHashCode()] = new Player(message, client, com);
             this.players[client.Client.GetHashCode()].setPosition(2, 2);
-            this.players[client.Client.GetHashCode()].setStatus(2);
+            this.players[client.Client.GetHashCode()].setStatus(1);
 
             // output
             Console.WriteLine("Player " + message + " connected [#" + client.Client.GetHashCode() + "]");

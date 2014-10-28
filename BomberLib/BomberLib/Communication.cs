@@ -33,6 +33,7 @@ namespace BomberLib
         public ComMessageHandler onGetPlayerPosition;
         public ComMessageHandler onGetPlayerList;
         public ComMessageHandler onGetPlayerStatus;
+        public ComMessageHandler onGetRoundStatus;
 
         // else
         public ComUnknownTypeHandler onUnknownType;
@@ -93,6 +94,9 @@ namespace BomberLib
                     break;
                 case "GetPlayerStatus":
                     if (onGetPlayerStatus != null) onGetPlayerStatus(client, message);
+                    break;
+                case "GetRoundStatus":
+                    if (onGetRoundStatus != null) onGetRoundStatus(client, message);
                     break;
                 case "SetPlayerStatus":
                     if (onSetPlayerStatus != null) onSetPlayerStatus(client, message);
