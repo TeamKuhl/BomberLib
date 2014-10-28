@@ -63,7 +63,7 @@ namespace BomberLib
             Console.WriteLine("Waiting for enough players to start a new round.");
 
             // wait for new round
-            while (this.ph.getTotalPlayerCount() < 1) { } // TODO Minplayers from config
+            while (this.ph.getWaitingPlayerCount() < 1) { } // TODO Minplayers from config
             
             // start round
             this.newRound();
@@ -87,23 +87,28 @@ namespace BomberLib
             // get spawn positions for players
             List<string> spawnPositions = this.bomberMap.getSpawnPositions(playerCount);
 
-            // get all players  
-            Dictionary<int, Player> allPlayers = this.ph.getAllPlayers();
-
             // counter for IENumerable 
             int counter = 0;
 
             // loop through players
-            foreach(KeyValuePair<int, Player> p in allPlayers)
+            foreach(KeyValuePair<int, Player> p in ph.players)
             {
-                // get random position
-                String[] position = spawnPositions[counter].Split(';');
 
-                // spawn player
-                p.Value.setPosition(Convert.ToInt32(position[0]), Convert.ToInt32(position[1]));
+                // only spawn waiting & playing players, no spectators
+                if (ph.players[p.Value.socketID].status <= 2)
+                {
+                    // get random position
+                    String[] position = spawnPositions[counter].Split(';');
 
-                // count
-                counter++;
+                    // set position
+                    ph.players[p.Value.socketID].setStatus(1);
+
+                    // spawn player
+                    ph.players[p.Value.socketID].setPosition(Convert.ToInt32(position[0]), Convert.ToInt32(position[1]));
+
+                    // count
+                    counter++;
+                }
             }
 
             // bombhandler
@@ -259,6 +264,10 @@ namespace BomberLib
                                 // breakable
                                 this.bomberMap.MapTiles[locY][locX].type = 1;
                                 this.bomberMap.sendMapToAll();
+
+                                // end explosion
+                                NichtIstWand = false;
+
                                 break;
                         }
 

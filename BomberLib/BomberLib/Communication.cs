@@ -28,9 +28,11 @@ namespace BomberLib
         public ComMessageHandler onCommand;
         public ComMessageHandler onBombPlace;
         public ComMessageHandler onItemUse;
+        public ComMessageHandler onSetPlayerStatus;
         public ComMessageHandler onGetMap;
         public ComMessageHandler onGetPlayerPosition;
         public ComMessageHandler onGetPlayerList;
+        public ComMessageHandler onGetPlayerStatus;
 
         // else
         public ComUnknownTypeHandler onUnknownType;
@@ -88,6 +90,12 @@ namespace BomberLib
                     break;
                 case "GetPlayerList":
                     if (onGetPlayerList != null) onGetPlayerList(client, message);
+                    break;
+                case "GetPlayerStatus":
+                    if (onGetPlayerStatus != null) onGetPlayerStatus(client, message);
+                    break;
+                case "SetPlayerStatus":
+                    if (onSetPlayerStatus != null) onSetPlayerStatus(client, message);
                     break;
                 default:
                     if (onUnknownType != null) onUnknownType(client, type, message);

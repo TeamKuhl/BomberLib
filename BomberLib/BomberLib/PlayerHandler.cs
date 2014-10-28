@@ -26,6 +26,8 @@ namespace BomberLib
             this.com.onDisconnect           += new ComConnectionHandler(LeaveHandler);
             this.com.onGetPlayerPosition    += new ComMessageHandler(GetPlayerPositionHandler);
             this.com.onGetPlayerList        += new ComMessageHandler(GetPlayerListHandler);
+            this.com.onGetPlayerStatus      += new ComMessageHandler(GetPlayerStatusHandler);
+            this.com.onSetPlayerStatus      += new ComMessageHandler(SetPlayerStatusHandler);
             
         }
 
@@ -36,11 +38,14 @@ namespace BomberLib
         /// <param name="message"></param>
         public void JoinHandler(TcpClient client, String message)
         {
+            // create player
             this.players[client.Client.GetHashCode()] = new Player(message, client, com);
-            this.com.sendToAll("Join", Convert.ToString(client.Client.GetHashCode()) + ":" + message);
-            Thread.Sleep(1000);
             this.players[client.Client.GetHashCode()].setPosition(2, 2);
-            Console.WriteLine("Player "+message+" connected [#"+client.Client.GetHashCode()+"]");
+            this.players[client.Client.GetHashCode()].setStatus(2);
+
+            // output
+            Console.WriteLine("Player " + message + " connected [#" + client.Client.GetHashCode() + "]");
+            this.com.sendToAll("Join", Convert.ToString(client.Client.GetHashCode()) + ":" + message);
         }
 
         /// <summary>
@@ -74,6 +79,39 @@ namespace BomberLib
                 // send player position
                 this.com.send(client, "PlayerPosition", p.socketID + ":" + p.X + ":" + p.Y);
             }
+        }
+
+        /// <summary>
+        /// Handles GetPlayerStatus requests
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
+        public void GetPlayerStatusHandler(TcpClient client, String message)
+        {
+            // convert message to int
+            int socketID = Convert.ToInt32(message);
+
+            // check if player is on this server
+            if(this.players.ContainsKey(socketID))
+            {
+                // send answer
+                this.com.send(client, "PlayerStatus", socketID + ":" + this.players[socketID].status);
+            }
+        }
+
+        /// <summary>
+        /// Handles SetPlayerStatus requests
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
+        public void SetPlayerStatusHandler(TcpClient client, String message)
+        {
+            // parse message
+            int statuscode = Convert.ToInt32(message);
+
+            // set status
+            this.players[client.Client.GetHashCode()].setStatus(statuscode);
+
         }
 
         /// <summary>
@@ -115,6 +153,25 @@ namespace BomberLib
         public int getTotalPlayerCount()
         {
             return players.Count;
+        }
+
+        public int getWaitingPlayerCount()
+        {
+            int waitingPlayer = 0;
+
+            // loop all players
+            foreach (KeyValuePair<int, Player> p in this.players)
+            {
+                // check if player is waiting
+                if (p.Value.status <= 2)
+                {
+                    waitingPlayer++;
+                }
+            }
+
+            // return
+            return waitingPlayer;
+
         }
 
         /// <summary>
