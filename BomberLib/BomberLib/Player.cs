@@ -9,11 +9,18 @@ using System.Diagnostics;
 namespace BomberLib
 {
 
+    // dead event for game class
+    public delegate void PlayerDiedHandler(Player p);
+
     public class Player
     {
         // declaration
         public TcpClient client;
         private Communication com;
+
+        // events
+        public PlayerDiedHandler onPlayerDied;
+        public PlayerChangeHandler onPlayerChange;
 
         // playername
         public string name = "";
@@ -95,6 +102,9 @@ namespace BomberLib
                 // tell the world what changed
                 this.com.sendToAll("PlayerStatus", this.socketID + ":" + this.status);
 
+                // player change
+                if (this.onPlayerChange != null) this.onPlayerChange();
+
                 return true;
             }
             else return false;
@@ -110,6 +120,9 @@ namespace BomberLib
 
             // send this
             this.com.sendToAll("PlayerDied", this.socketID + "");
+
+            // call event
+            if (this.onPlayerDied != null) this.onPlayerDied(this);
         }
 
 

@@ -11,11 +11,16 @@ namespace BomberLib
 {
     // bomberlib events
     public delegate void PlayerChangedPositionHandler(String PlayerName, int X, int Y);
+    public delegate void PlayerChangeHandler();
 
     public class PlayerHandler
     {
         private Communication com;
         public Dictionary<int, Player> players = new Dictionary<int, Player>();
+
+        // events
+        public PlayerDiedHandler onPlayerDied;
+        public PlayerChangeHandler onPlayerChange;
 
         public PlayerHandler(Communication c)
         {
@@ -40,8 +45,16 @@ namespace BomberLib
         {
             // create player
             this.players[client.Client.GetHashCode()] = new Player(message, client, com);
-            this.players[client.Client.GetHashCode()].setPosition(2, 2);
-            this.players[client.Client.GetHashCode()].setStatus(1);
+            this.players[client.Client.GetHashCode()].setStatus(2);
+
+            // listen to dead
+            this.players[client.Client.GetHashCode()].onPlayerDied += new PlayerDiedHandler(PlayerDiedHandler);
+
+            // listen to change
+            this.players[client.Client.GetHashCode()].onPlayerChange += new PlayerChangeHandler(PlayerChangeHandler);
+
+            // player change
+            if (this.onPlayerChange != null) this.onPlayerChange();
 
             // output
             Console.WriteLine("Player " + message + " connected [#" + client.Client.GetHashCode() + "]");
@@ -61,6 +74,9 @@ namespace BomberLib
                 Console.WriteLine("Player " + players[SocketID].name + " disconnected [#" + SocketID + "]");
                 this.com.sendToAllExcept(client, "Leave", Convert.ToString(SocketID));
                 players.Remove(SocketID);
+
+                // player change
+                if (this.onPlayerChange != null) this.onPlayerChange();
             }
         }
 
@@ -111,6 +127,9 @@ namespace BomberLib
 
             // set status
             this.players[client.Client.GetHashCode()].setStatus(statuscode);
+
+            // player change
+            if (this.onPlayerChange != null) this.onPlayerChange();
 
         }
 
@@ -174,6 +193,21 @@ namespace BomberLib
 
         }
 
+        public int getLivingPlayerCount()
+        {
+            int livingPlayer = 0;
+
+            foreach (KeyValuePair<int, Player> p in this.players)
+            {
+                if (p.Value.status == 1)
+                {
+                    livingPlayer++;
+                }
+            }
+
+            return livingPlayer;
+        }
+
         /// <summary>
         /// get the player dictionary
         /// </summary>
@@ -227,6 +261,23 @@ namespace BomberLib
                 }
             }
             return null;
+        }
+
+
+        public void PlayerDiedHandler(Player p)
+        {
+            // pass event
+            if (this.onPlayerDied != null) this.onPlayerDied(p);
+
+            // player change
+            if (this.onPlayerChange != null) this.onPlayerChange();
+        }
+
+
+        public void PlayerChangeHandler()
+        {
+            // player change
+            if (this.onPlayerChange != null) this.onPlayerChange();
         }
     }
 }

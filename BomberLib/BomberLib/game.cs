@@ -49,8 +49,17 @@ namespace BomberLib
             // create playerhandler
              ph = new PlayerHandler(com);
 
+            // listen to dead players
+             ph.onPlayerDied += new PlayerDiedHandler(PlayerDiedHandler);
+
+            // listen to changes
+             ph.onPlayerChange += new PlayerChangeHandler(PlayerChangeHandler);
+
             // start chat 
-            chat = new Chat(com, ph);
+             chat = new Chat(com, ph);
+
+             // log
+             Console.WriteLine("Waiting for enough players to start a new round.");
 
             // start new round
             this.tryNewRound();
@@ -62,25 +71,31 @@ namespace BomberLib
         /// </summary>
         public void tryNewRound()
         {
-            // log
-            Console.WriteLine("Waiting for enough players to start a new round.");
+            if (this.roundStatus == 0)
+            {
+                // wait for new round
+                if (this.ph.getWaitingPlayerCount() >= 2) // TODO Minplayers from config
+                {
 
-            // wait for new round
-            while (this.ph.getTotalPlayerCount() < 1) { } // TODO Minplayers from config
-            
-            // start round
-            this.newRound();
+                    // start round
+                    this.newRound();
+
+                }
+            }
         }
 
         /// <summary>
         /// starts a new round
         /// </summary>
         /// <returns></returns>
-        public Boolean newRound()
+        public void newRound()
         {
             // round status update
             this.roundStatus = 1;
             this.com.sendToAll("RoundStatus", this.roundStatus.ToString());
+
+            // reload map
+            bomberMap = new BomberMap("bomberMap", com);
 
             // output
             Console.WriteLine("New round started. Spawning players.");
@@ -126,8 +141,6 @@ namespace BomberLib
 
             // listen for move events
             this.com.onMove += new ComMessageHandler(MoveHandler);
-
-            return true;
         }
 
         // ==================
@@ -312,6 +325,29 @@ namespace BomberLib
         public void GetRoundStatusHandler(TcpClient client, String message)
         {
             this.com.send(client, "RoundStatus", this.roundStatus.ToString());
+        }
+
+        /// <summary>
+        /// Handles player death (check round end)
+        /// </summary>
+        /// <param name="p"></param>
+        public void PlayerDiedHandler(Player p)
+        {
+            // check player count
+            if (this.ph.getLivingPlayerCount() <= 1)
+            {
+                // output
+                Console.WriteLine("Round is over. "+p.name+" won!");
+
+                this.roundStatus = 0;
+
+                this.tryNewRound();
+            }
+        }
+
+        public void PlayerChangeHandler()
+        {
+            this.tryNewRound();
         }
         
     }
