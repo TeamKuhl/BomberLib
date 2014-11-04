@@ -337,7 +337,7 @@ namespace BomberLib
             if (this.ph.getLivingPlayerCount() <= 1)
             {
                 // output
-                Console.WriteLine("Round is over. "+p.name+" won!");
+                Console.WriteLine("Round is over. "+ph.getLastLivingPlayer().name+" won!");
 
                 this.roundStatus = 0;
 

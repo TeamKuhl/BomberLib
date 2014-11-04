@@ -263,6 +263,18 @@ namespace BomberLib
             return null;
         }
 
+        public Player getLastLivingPlayer()
+        {
+            foreach (KeyValuePair<int, Player> p in this.players)
+            {
+                if (p.Value.status == 1)
+                {
+                    return p.Value;
+                }
+            }
+            return null;
+        }
+
 
         public void PlayerDiedHandler(Player p)
         {
