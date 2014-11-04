@@ -10,7 +10,7 @@ using System.Threading;
 namespace BomberLib
 {
     // bomberlib events
-    public delegate void PlayerChangedPositionHandler(int PlayerID, String PlayerName, int X, int Y);
+    public delegate void PlayerChangedPositionHandler(String PlayerName, int X, int Y);
 
     public class PlayerHandler
     {
