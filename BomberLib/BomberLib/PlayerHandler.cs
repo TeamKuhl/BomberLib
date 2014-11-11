@@ -29,6 +29,7 @@ namespace BomberLib
             // events
             this.com.onPlayerInfo           += new ComMessageHandler(JoinHandler);
             this.com.onDisconnect           += new ComConnectionHandler(LeaveHandler);
+            this.com.onConnect              += new ComConnectionHandler(ConnectHandler);
             this.com.onGetPlayerPosition    += new ComMessageHandler(GetPlayerPositionHandler);
             this.com.onGetPlayerList        += new ComMessageHandler(GetPlayerListHandler);
             this.com.onGetPlayerStatus      += new ComMessageHandler(GetPlayerStatusHandler);
@@ -43,6 +44,10 @@ namespace BomberLib
         /// <param name="message"></param>
         public void JoinHandler(TcpClient client, String message)
         {
+            // output
+            Console.WriteLine("Player " + message + " connected [#" + client.Client.GetHashCode() + "]");
+            this.com.sendToAll("Join", Convert.ToString(client.Client.GetHashCode()) + ":" + message);
+
             // create player
             this.players[client.Client.GetHashCode()] = new Player(message, client, com);
             this.players[client.Client.GetHashCode()].setStatus(2);
@@ -55,10 +60,6 @@ namespace BomberLib
 
             // player change
             if (this.onPlayerChange != null) this.onPlayerChange();
-
-            // output
-            Console.WriteLine("Player " + message + " connected [#" + client.Client.GetHashCode() + "]");
-            this.com.sendToAll("Join", Convert.ToString(client.Client.GetHashCode()) + ":" + message);
         }
 
         /// <summary>
@@ -290,6 +291,11 @@ namespace BomberLib
         {
             // player change
             if (this.onPlayerChange != null) this.onPlayerChange();
+        }
+
+        public void ConnectHandler(TcpClient client)
+        {
+            this.com.send(client, "YourId", client.Client.GetHashCode().ToString());
         }
     }
 }

@@ -22,6 +22,7 @@ namespace BomberLib
     {
         // events
         public ComConnectionHandler onDisconnect;
+        public ComConnectionHandler onConnect;
         public ComMessageHandler onPlayerInfo;
         public ComMessageHandler onMove;
         public ComMessageHandler onChatMessage;
@@ -52,6 +53,7 @@ namespace BomberLib
             // listen to server events
             server.onReceive += new ServerReceiveHandler(ReceiveMessageHandler);
             server.onDisconnect += new ServerDisconnectHandler(DisconnectHandler);
+            server.onConnect += new ServerConnectHandler(ConnectHandler);
         }
 
         /// <summary>
@@ -114,6 +116,15 @@ namespace BomberLib
         public void DisconnectHandler(TcpClient client)
         {
             if (onDisconnect != null) onDisconnect(client);
+        }
+
+        /// <summary>
+        ///     Handler for player connects 
+        /// </summary>
+        /// <param name="client"></param>
+        public void ConnectHandler(TcpClient client)
+        {
+            if (onConnect != null) onConnect(client);
         }
 
         /// <summary>
