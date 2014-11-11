@@ -115,14 +115,17 @@ namespace BomberLib
         /// </summary>
         public void die()
         {
-            // set position
-            this.setStatus(2);
+            if (this.status == 1)
+            {
+                // set position
+                this.setStatus(2);
 
-            // send this
-            this.com.sendToAll("PlayerDied", this.socketID + "");
+                // send this
+                this.com.sendToAll("PlayerDied", this.socketID + "");
 
-            // call event
-            if (this.onPlayerDied != null) this.onPlayerDied(this);
+                // call event
+                if (this.onPlayerDied != null) this.onPlayerDied(this);
+            }
         }
 
 

@@ -22,6 +22,7 @@ namespace BomberLib
 
         // game variables
         int roundStatus = 0;
+        bool roundBlocked = false;
 
         /// <summary>
         ///     Starts the server
@@ -76,7 +77,7 @@ namespace BomberLib
         /// </summary>
         public void tryNewRound()
         {
-            if (this.roundStatus == 0)
+            if (this.roundStatus == 0 && !roundBlocked)
             {
                 // wait for new round
                 if (this.ph.getWaitingPlayerCount() >= 2) // TODO Minplayers from config
@@ -128,7 +129,7 @@ namespace BomberLib
                     ph.players[p.Value.socketID].setStatus(1);
 
                     // spawn player
-                    ph.players[p.Value.socketID].setPosition(Convert.ToInt32(position[0]), Convert.ToInt32(position[1]));
+                    ph.players[p.Value.socketID].setPosition(Convert.ToInt32(position[1]), Convert.ToInt32(position[0]));
 
                     // count
                     counter++;
@@ -171,6 +172,8 @@ namespace BomberLib
                     this.roundStatus = 0;
                     this.com.sendToAll("RoundStatus", this.roundStatus.ToString());
 
+                    roundBlocked = true;
+
                     Thread thread = new Thread(this.waitNewRound);
                     thread.Start();
                 }
@@ -181,6 +184,7 @@ namespace BomberLib
         {
             // wait and start
             Thread.Sleep(5000);
+            roundBlocked = false;
             this.tryNewRound();
         }
 

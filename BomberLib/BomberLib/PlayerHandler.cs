@@ -72,6 +72,7 @@ namespace BomberLib
 
             if (players.ContainsKey(SocketID))
             {
+                if (this.onPlayerDied != null) this.onPlayerDied(players[SocketID]);
                 Console.WriteLine("Player " + players[SocketID].name + " disconnected [#" + SocketID + "]");
                 this.com.sendToAllExcept(client, "Leave", Convert.ToString(SocketID));
                 players.Remove(SocketID);
