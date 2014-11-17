@@ -102,6 +102,7 @@ namespace BomberLib
 
             // reload map
             bomberMap = new BomberMap("bomberMap", com);
+            bomberMap.sendMapToAll();
 
             // output
             Console.WriteLine("New round started. Spawning players.");
