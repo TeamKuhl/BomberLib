@@ -362,7 +362,7 @@ namespace BomberLib
             if (p.status == 1)
             {
                 // check for bomb placed before, see #3
-                if(this.bombHandler.isBombAtPosition(p.X, p.Y))
+                if(!this.bombHandler.isBombAtPosition(p.X, p.Y))
                 {
                     // place bomb
                     this.bombHandler.placeBomb(p.size, p.time, p.X, p.Y);
