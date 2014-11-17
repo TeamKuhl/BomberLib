@@ -361,9 +361,12 @@ namespace BomberLib
             // no dead killas please, see #2
             if (p.status == 1)
             {
-
-                // place bomb
-                this.bombHandler.placeBomb(p.size, p.time, p.X, p.Y);
+                // check for bomb placed before, see #3
+                if(this.bombHandler.isBombAtPosition(p.X, p.Y))
+                {
+                    // place bomb
+                    this.bombHandler.placeBomb(p.size, p.time, p.X, p.Y);
+                }
 
             }
             
