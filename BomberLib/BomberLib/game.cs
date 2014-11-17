@@ -358,8 +358,14 @@ namespace BomberLib
             // get player
             Player p = this.ph.getPlayerByHashcode(client.Client.GetHashCode());
 
-            // place bomb
-            this.bombHandler.placeBomb(p.size, p.time, p.X, p.Y);
+            // no dead killas please, see #2
+            if (p.status == 1)
+            {
+
+                // place bomb
+                this.bombHandler.placeBomb(p.size, p.time, p.X, p.Y);
+
+            }
             
         }
 
