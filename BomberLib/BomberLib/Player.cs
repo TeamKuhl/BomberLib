@@ -10,7 +10,7 @@ namespace BomberLib
 {
 
     // dead event for game class
-    public delegate void PlayerDiedHandler(Player p);
+    public delegate void PlayerDiedHandler();
 
     public class Player
     {
@@ -124,7 +124,7 @@ namespace BomberLib
                 this.com.sendToAll("PlayerDied", this.socketID + "");
 
                 // call event
-                if (this.onPlayerDied != null) this.onPlayerDied(this);
+                if (this.onPlayerDied != null) this.onPlayerDied();
             }
         }
 

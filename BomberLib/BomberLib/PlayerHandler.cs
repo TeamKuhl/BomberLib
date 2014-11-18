@@ -72,13 +72,18 @@ namespace BomberLib
 
             if (players.ContainsKey(SocketID))
             {
-                if (this.onPlayerDied != null) this.onPlayerDied(players[SocketID]);
                 Console.WriteLine("Player " + players[SocketID].name + " disconnected [#" + SocketID + "]");
                 this.com.sendToAllExcept(client, "Leave", Convert.ToString(SocketID));
-                players.Remove(SocketID);
 
                 // player change
                 if (this.onPlayerChange != null) this.onPlayerChange();
+
+                // remove
+                players.Remove(SocketID);
+
+                // died
+                if (this.onPlayerDied != null) this.onPlayerDied();
+
             }
         }
 
@@ -278,10 +283,10 @@ namespace BomberLib
         }
 
 
-        public void PlayerDiedHandler(Player p)
+        public void PlayerDiedHandler()
         {
             // pass event
-            if (this.onPlayerDied != null) this.onPlayerDied(p);
+            if (this.onPlayerDied != null) this.onPlayerDied();
 
             // player change
             if (this.onPlayerChange != null) this.onPlayerChange();

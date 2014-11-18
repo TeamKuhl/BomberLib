@@ -163,11 +163,20 @@ namespace BomberLib
                     // winner
                     Player winner = ph.getLastLivingPlayer();
 
-                    // output
-                    Console.WriteLine("Round is over. " + winner.name + " won!");
+                    // check winner
+                    if (winner != null)
+                    {
 
-                    // tell the winner
-                    this.com.sendToAll("PlayerWin", winner.name);
+                        // output
+                        Console.WriteLine("Round is over. " + winner.name + " won!");
+
+                        // set last player to waiting
+                        ph.players[winner.socketID].setStatus(2);
+
+                        // tell the winner
+                        this.com.sendToAll("PlayerWin", winner.socketID.ToString());
+
+                    }
 
                     // end round
                     this.roundStatus = 0;
@@ -386,7 +395,7 @@ namespace BomberLib
         /// Handles player death (check round end)
         /// </summary>
         /// <param name="p"></param>
-        public void PlayerDiedHandler(Player p)
+        public void PlayerDiedHandler()
         {
             this.checkEndRound();
         }

@@ -134,8 +134,13 @@ namespace BomberLib
         /// <param name="message"></param>
         public void sendToAll(string type, string message)
         {
-            // use communication library 
-            server.sendToAll(type, message);
+            // temporary try catch
+            try
+            {
+                // use communication library 
+                server.sendToAll(type, message);
+            }
+            catch (Exception e) {  }
         }
 
         /// <summary>
