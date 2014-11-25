@@ -270,6 +270,10 @@ namespace BomberLib
             return null;
         }
 
+        /// <summary>
+        /// get the last living player on the field to select the winner
+        /// </summary>
+        /// <returns></returns>
         public Player getLastLivingPlayer()
         {
             foreach (KeyValuePair<int, Player> p in this.players)
@@ -282,7 +286,9 @@ namespace BomberLib
             return null;
         }
 
-
+        /// <summary>
+        /// Handle "PlayerDied" events from player class to pass to Game
+        /// </summary>
         public void PlayerDiedHandler()
         {
             // pass event
@@ -292,13 +298,19 @@ namespace BomberLib
             if (this.onPlayerChange != null) this.onPlayerChange();
         }
 
-
+        /// <summary>
+        /// Handles player change events to try to search for a winner
+        /// </summary>
         public void PlayerChangeHandler()
         {
             // player change
             if (this.onPlayerChange != null) this.onPlayerChange();
         }
 
+        /// <summary>
+        /// Handle connect event to send the id back to the client
+        /// </summary>
+        /// <param name="client"></param>
         public void ConnectHandler(TcpClient client)
         {
             this.com.send(client, "YourId", client.Client.GetHashCode().ToString());

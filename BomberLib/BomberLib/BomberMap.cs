@@ -13,7 +13,7 @@ namespace BomberLib
         // declaration
         public int height = 0;
         public int width = 0;
-        public Dictionary<int, Dictionary<int, MapTile>> MapTiles;
+        private Dictionary<int, Dictionary<int, MapTile>> MapTiles;
         public String name = "";
         public String rawMap;
 
@@ -127,6 +127,16 @@ namespace BomberLib
         }
 
         /// <summary>
+        /// reset map to loaded map
+        /// </summary>
+        public void resetMap()
+        {
+            // reload map
+            loadMapFromFile(name);
+            sendMapToAll();
+        }
+
+        /// <summary>
         ///     Handle get map requests
         /// </summary>
         /// <param name="client"></param>
@@ -209,6 +219,69 @@ namespace BomberLib
 
             // return this positions
             return randomPositions.ToList<string>();
+        }
+
+        /// <summary>
+        /// Get type of map tile on position X, Y
+        /// </summary>
+        /// <param name="X">Tile</param>
+        /// <param name="Y">Row</param>
+        /// <returns></returns>
+        public int getTileType(int X, int Y)
+        {
+            // check if row exists
+            if (hasLocation(X, Y))
+            {
+                // return type of tile
+                return MapTiles[Y][X].type;
+            }
+            else return 0;
+        }
+
+        /// <summary>
+        /// Set type of map tile
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public bool setTileType(int X, int Y, int type)
+        {
+            // check if row exists
+            if (hasLocation(X, Y))
+            {
+                // return type of tile
+                MapTiles[Y][X].type = type;
+
+                // send map to all
+                this.sendMapToAll();
+
+                // success
+                return true;
+            }
+            else return false;
+        }
+
+        /// <summary>
+        /// Check if this map has a location with this X and Y
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <returns></returns>
+        public bool hasLocation(int X, int Y)
+        {
+            // check if row exists
+            if (MapTiles.ContainsKey(Y))
+            {
+                // check if tile exists
+                if (MapTiles[Y].ContainsKey(X))
+                {
+                    // success
+                    return true;
+                }
+                else return false;
+            }
+            else return false;
         }
 
     }

@@ -7,13 +7,6 @@
       <FileName>Bomb.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="BomberLib.BomberMap">
-    <Position X="7" Y="4.5" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AiAAAQAAAAAgAAQAQAAAAQAAGAAEAAIEAAAAAAAAAAA=</HashCode>
-      <FileName>BomberMap.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="BomberLib.BombHandler">
     <Position X="7" Y="7.75" Width="2" />
     <TypeIdentifier>
@@ -31,14 +24,14 @@
   <Class Name="BomberLib.Communication">
     <Position X="3" Y="2.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AgAEAAgAIAAASAACCBBAIAAAAAABAACQAACAAAAEAII=</HashCode>
+      <HashCode>AgAEAAgQIAAASAACCBBAIAAAAAABAACQBACAAAAEAII=</HashCode>
       <FileName>Communication.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BomberLib.Game">
     <Position X="5" Y="3" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>ABACAAAAAAABQAQwAAAAAQAAQAAEAEQAAAAIAIAAAAI=</HashCode>
+      <HashCode>IBAGAAAAAAABQAQwAAAAAQAARAAEIEQAAAAIAIAABAI=</HashCode>
       <FileName>Game.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -52,15 +45,22 @@
   <Class Name="BomberLib.Player">
     <Position X="9.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQBAAAIACQAAAAAAIAAAQACAAAEAUAAAAAABAAAYAA=</HashCode>
+      <HashCode>AAQBAAAIACQgAAAAAIAAAQACAAAEAUAAAAAABAABYAA=</HashCode>
       <FileName>Player.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BomberLib.PlayerHandler">
     <Position X="7" Y="0.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAABEAAAAEAAQABAAAgEAQgAAAAAAAAAIAQAgAAAAAA=</HashCode>
+      <HashCode>IAAFEAAQAEAgQABAAAgEAQgAAACAAAAAIBQAgAABAAA=</HashCode>
       <FileName>PlayerHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BomberLib.BomberMap">
+    <Position X="7" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AiACAQAAAAAgAAQAQAAAAQAAGAAkAAIEAAAAAAAAAAA=</HashCode>
+      <FileName>BomberMap.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Tahoma" Size="8.25" />

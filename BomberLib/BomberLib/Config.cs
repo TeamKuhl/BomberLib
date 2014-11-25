@@ -18,6 +18,8 @@ namespace BomberLib
         {
             // testing
             this.set("server-port", "45454");
+            this.set("map-name", "bomberMap");
+            this.set("min-players", "2");
             // this.initialize();
         }
 
@@ -56,6 +58,21 @@ namespace BomberLib
                 else return null;
             }
             else return null;
+        }
+
+        /// <summary>
+        /// get a setting as an int
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public int getInt(string name)
+        {
+            String setting = get(name);
+            if (setting == null) return 0;
+            else
+            {
+                return Convert.ToInt32(name);
+            }
         }
     }
 }

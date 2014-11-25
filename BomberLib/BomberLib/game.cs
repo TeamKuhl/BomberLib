@@ -37,7 +37,7 @@ namespace BomberLib
             server = new Server();
             
             // start server
-            server.start(45454); // TODO Port from Config
+            server.start(45454); 
 
             // output
             Console.WriteLine("Server started, listening on port " + 45454);
@@ -49,7 +49,7 @@ namespace BomberLib
             com.onGetRoundStatus += new ComMessageHandler(GetRoundStatusHandler);
 
             // load map
-            bomberMap = new BomberMap("bomberMap", com); // TODO Map name from config
+            bomberMap = new BomberMap("bomberMap", com); 
 
             // create playerhandler
              ph = new PlayerHandler(com);
@@ -77,10 +77,11 @@ namespace BomberLib
         /// </summary>
         public void tryNewRound()
         {
+            // check if new round is allowed
             if (this.roundStatus == 0 && !roundBlocked)
             {
                 // wait for new round
-                if (this.ph.getWaitingPlayerCount() >= 2) // TODO Minplayers from config
+                if (this.ph.getWaitingPlayerCount() >= 2)
                 {
 
                     // start round
@@ -101,8 +102,7 @@ namespace BomberLib
             this.com.sendToAll("RoundStatus", this.roundStatus.ToString());
 
             // reload map
-            bomberMap = new BomberMap("bomberMap", com);
-            bomberMap.sendMapToAll();
+            bomberMap.resetMap();
 
             // output
             Console.WriteLine("New round started. Spawning players.");
@@ -244,7 +244,7 @@ namespace BomberLib
                 if (newx > 0 && newy > 0 && newy <= this.bomberMap.height && newx <= this.bomberMap.width)
                 {
                     // check maptile type from bombermap
-                    if (this.bomberMap.MapTiles[newy][newx].type == 1)
+                    if (this.bomberMap.getTileType(newx, newy) == 1)
                     {
                         // check if there is a player
                         if (!this.ph.isPlayerOnPosition(newx, newy) || this.ph.getPlayerOnPosition(newx, newy).status != 1)
@@ -310,14 +310,14 @@ namespace BomberLib
                             break;
                     }
 
-                    if (this.bomberMap.MapTiles.ContainsKey(locY) && this.bomberMap.MapTiles[locY].ContainsKey(locX))
+                    if (this.bomberMap.hasLocation(locX, locY))
                     {
 
                         // check if wall, Karol <3
                         Boolean NichtIstWand = true;
 
                         // tiletypes
-                        switch (this.bomberMap.MapTiles[locY][locX].type)
+                        switch (this.bomberMap.getTileType(locX, locY))
                         {
                             case 0:
                                 // wall
@@ -339,8 +339,7 @@ namespace BomberLib
                                 locations += locX + ":" + locY + ";";
 
                                 // breakable
-                                this.bomberMap.MapTiles[locY][locX].type = 1;
-                                this.bomberMap.sendMapToAll();
+                                this.bomberMap.setTileType(locX, locY, 1);
 
                                 // end explosion
                                 NichtIstWand = false;
