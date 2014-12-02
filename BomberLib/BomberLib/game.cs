@@ -241,7 +241,7 @@ namespace BomberLib
                 int newx = this.ph.players[id].X + changex;
                 int newy = this.ph.players[id].Y + changey;
 
-                if (newx > 0 && newy > 0 && newy <= this.bomberMap.height && newx <= this.bomberMap.width)
+                if (newx > 0 && newy > 0 && newy <= this.bomberMap.getHeight() && newx <= this.bomberMap.getWidth())
                 {
                     // check maptile type from bombermap
                     if (this.bomberMap.getTileType(newx, newy) == 1)
@@ -270,13 +270,13 @@ namespace BomberLib
         /// <param name="X"></param>
         /// <param name="Y"></param>
         /// <param name="size"></param>
-        public void BombExplosionHandler(int X, int Y, int size)
+        public void BombExplosionHandler(int X, int Y, int size, int playerID)
         {
             // bomb location
             if (ph.isPlayerOnPosition(X, Y))
             {
                 Player p = ph.getPlayerOnPosition(X, Y);
-                p.die();
+                p.die(playerID);
             }
 
             // explosion locations (starting with X,Y)
@@ -331,7 +331,7 @@ namespace BomberLib
                                 if (ph.isPlayerOnPosition(locX, locY))
                                 {
                                     Player p = ph.getPlayerOnPosition(locX, locY);
-                                    p.die();
+                                    p.die(playerID);
                                 }
                                 break;
                             case 2:
@@ -352,6 +352,9 @@ namespace BomberLib
                 }
             }
 
+            // new bombs possible
+            ph.players[playerID].curamount--;
+
             // send exploded locations to all clients
             this.com.sendToAll("BombExploded", locations);
         }
@@ -369,13 +372,19 @@ namespace BomberLib
             // no dead killas please, see #2
             if (p.status == 1)
             {
-                // check for bomb placed before, see #3
-                if(!this.bombHandler.isBombAtPosition(p.X, p.Y))
+                // check max bombs
+                if (p.curamount < p.maxamount)
                 {
-                    // place bomb
-                    this.bombHandler.placeBomb(p.size, p.time, p.X, p.Y);
-                }
+                    // check for bomb placed before, see #3
+                    if (!this.bombHandler.isBombAtPosition(p.X, p.Y))
+                    {
+                        // one bomb more
+                        ph.players[client.Client.GetHashCode()].curamount++;
 
+                        // place bomb
+                        this.bombHandler.placeBomb(p.size, p.time, p.X, p.Y, p.socketID);
+                    }
+                }
             }
             
         }

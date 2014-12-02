@@ -11,11 +11,11 @@ namespace BomberLib
     class BomberMap
     {
         // declaration
-        public int height = 0;
-        public int width = 0;
+        private int height = 0;
+        private int width = 0;
         private Dictionary<int, Dictionary<int, MapTile>> MapTiles;
-        public String name = "";
-        public String rawMap;
+        private String name = "";
+        private String rawMap;
 
         private Communication com;
 
@@ -282,6 +282,16 @@ namespace BomberLib
                 else return false;
             }
             else return false;
+        }
+
+        public int getHeight()
+        {
+            return height;
+        }
+
+        public int getWidth()
+        {
+            return width;
         }
 
     }

@@ -30,10 +30,10 @@ namespace BomberLib
         /// <param name="time"></param>
         /// <param name="X"></param>
         /// <param name="Y"></param>
-        public void placeBomb(int size, int time, int X, int Y)
+        public void placeBomb(int size, int time, int X, int Y, int playerID)
         {
             // create bomb
-            Bomb bomb = new Bomb(size, time, X, Y);
+            Bomb bomb = new Bomb(size, time, X, Y, playerID);
 
             // listen to event
             bomb.onBombExplosion += new BombExplosionHandler(BombExplosionHandler);
@@ -51,7 +51,7 @@ namespace BomberLib
         /// <param name="X"></param>
         /// <param name="Y"></param>
         /// <param name="size"></param>
-        public void BombExplosionHandler(int X, int Y, int size)
+        public void BombExplosionHandler(int X, int Y, int size, int playerID)
         {
             // loop bombs to remove the one which exploded
             foreach(Bomb bomb in this.bombs)
@@ -64,7 +64,7 @@ namespace BomberLib
             }
 
             // call event for further actions
-            if(this.onBombExplosion != null) this.onBombExplosion(X, Y, size);
+            if(this.onBombExplosion != null) this.onBombExplosion(X, Y, size, playerID);
         }
 
         public Boolean isBombAtPosition(int X, int Y)

@@ -33,6 +33,8 @@ namespace BomberLib
 
         // current settings
         public int size = 3;
+        public int maxamount = 3;
+        public int curamount = 0;
         public int time = 3;
         public int speed = 100;
 
@@ -111,7 +113,7 @@ namespace BomberLib
         /// <summary>
         ///     player died
         /// </summary>
-        public void die()
+        public void die(int playerID)
         {
             if (this.status == 1)
             {
@@ -119,7 +121,7 @@ namespace BomberLib
                 this.setStatus(2);
 
                 // send this
-                this.com.sendToAll("PlayerDied", this.socketID + "");
+                this.com.sendToAll("PlayerDied", this.socketID + ":" + playerID);
 
                 // call event
                 if (this.onPlayerDied != null) this.onPlayerDied();

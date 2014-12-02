@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="BomberLib.Bomb">
-    <Position X="9.25" Y="7.75" Width="1.5" />
+    <Position X="9.25" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAAAAAAAIAAAAAAAAgAAAAEAAAAAAAAYAA=</HashCode>
       <FileName>Bomb.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BomberLib.BombHandler">
-    <Position X="7" Y="7.75" Width="2" />
+    <Position X="7" Y="6" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABAAAAAAAAQQAAAAgAAAAAAAAAAIAAAEA=</HashCode>
       <FileName>BombHandler.cs</FileName>
@@ -29,14 +29,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="BomberLib.Game">
-    <Position X="5" Y="3" Width="1.75" />
+    <Position X="5" Y="2.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>IBAGAAAAAAABQAQwAAAAAQAARAAEIEQAAAAIAIAABAI=</HashCode>
       <FileName>Game.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BomberLib.MapTile">
-    <Position X="9.25" Y="4.5" Width="1.5" />
+    <Position X="9.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAAAABgAAAAAAA=</HashCode>
       <FileName>MapTile.cs</FileName>
@@ -50,16 +50,16 @@
     </TypeIdentifier>
   </Class>
   <Class Name="BomberLib.PlayerHandler">
-    <Position X="7" Y="0.75" Width="2" />
+    <Position X="11" Y="2.25" Width="2" />
     <TypeIdentifier>
       <HashCode>IAAFEAAQAEAgQABAAAgEAQgAAACAAAAAIBQAgAABAAA=</HashCode>
       <FileName>PlayerHandler.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BomberLib.BomberMap">
-    <Position X="7" Y="4.5" Width="2" />
+    <Position X="7" Y="1.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AiACAQAAAAAgAAQAQAAAAQAAGAAkAAIEAAAAAAAAAAA=</HashCode>
+      <HashCode>QiACARAAAACgAAQAQAAAAQAAGAAkQAIEAAAAAAAAAAA=</HashCode>
       <FileName>BomberMap.cs</FileName>
     </TypeIdentifier>
   </Class>

@@ -9,7 +9,7 @@ namespace BomberLib
 {
 
     // bomb explosion event
-    public delegate void BombExplosionHandler(int X, int Y, int size);
+    public delegate void BombExplosionHandler(int X, int Y, int size, int playerID);
 
     class Bomb
     {
@@ -25,14 +25,18 @@ namespace BomberLib
         // time
         public int time;
 
+        // by player
+        public int playerID;
+
         // initialize
-        public Bomb(int BombSize, int BombTime, int PosX, int PosY)
+        public Bomb(int BombSize, int BombTime, int PosX, int PosY, int Placer)
         {
             // set variables
             this.X = PosX;
             this.Y = PosY;
             this.size = BombSize;
             this.time = BombTime;
+            this.playerID = Placer;
 
             // start timer in a thread
             Thread thread = new Thread(this.wait);
@@ -47,7 +51,7 @@ namespace BomberLib
             Thread.Sleep(this.time * 1000);
             if(this.onBombExplosion != null)
             {
-                this.onBombExplosion(this.X, this.Y, this.size);
+                this.onBombExplosion(this.X, this.Y, this.size, this.playerID);
             }
         }
 
