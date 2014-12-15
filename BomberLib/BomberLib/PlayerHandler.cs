@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Collections;
 using System.Threading;
+using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace BomberLib
 {
@@ -17,6 +20,7 @@ namespace BomberLib
     {
         private Communication com;
         public Dictionary<int, Player> players = new Dictionary<int, Player>();
+        private Dictionary<string, string> models = new Dictionary<string, string>();
 
         // events
         public PlayerDiedHandler onPlayerDied;
@@ -26,6 +30,8 @@ namespace BomberLib
         {
             this.com = c;
 
+            this.loadPlayerModels();
+
             // events
             this.com.onPlayerInfo           += new ComMessageHandler(JoinHandler);
             this.com.onDisconnect           += new ComConnectionHandler(LeaveHandler);
@@ -34,6 +40,9 @@ namespace BomberLib
             this.com.onGetPlayerList        += new ComMessageHandler(GetPlayerListHandler);
             this.com.onGetPlayerStatus      += new ComMessageHandler(GetPlayerStatusHandler);
             this.com.onSetPlayerStatus      += new ComMessageHandler(SetPlayerStatusHandler);
+            this.com.onGetPlayerModel       += new ComMessageHandler(GetPlayerModelHandler);
+            this.com.onGetModelList         += new ComMessageHandler(GetModelListHandler);
+            this.com.onSetPlayerModel       += new ComMessageHandler(SetPlayerModelHanlder);
             
         }
 
@@ -51,6 +60,9 @@ namespace BomberLib
             // create player
             this.players[client.Client.GetHashCode()] = new Player(message, client, com);
             this.players[client.Client.GetHashCode()].setStatus(2);
+
+            // default cow
+            this.players[client.Client.GetHashCode()].image = models["Blue Cow"];
 
             // listen to dead
             this.players[client.Client.GetHashCode()].onPlayerDied += new PlayerDiedHandler(PlayerDiedHandler);
@@ -159,6 +171,27 @@ namespace BomberLib
             if(playerlist != "")
             {
                 this.com.send(client, "PlayerList", playerlist);
+            }
+        }
+
+        public void GetPlayerModelHandler(TcpClient client, string message)
+        {
+            this.com.send(client, "PlayerModel", message+":"+players[Convert.ToInt32(message)].image);
+        }
+
+        public void GetModelListHandler(TcpClient client, string message)
+        {
+            this.com.send(client, "ModelList", getModelList());
+        }
+
+        public void SetPlayerModelHanlder(TcpClient client, string message)
+        {
+            int id = client.Client.GetHashCode();
+
+            if (models.ContainsKey(message))
+            {
+                this.players[id].image = models[message];
+                this.com.sendToAll("PlayerModel", id + ":" + this.players[id].image);
             }
         }
 
@@ -314,6 +347,61 @@ namespace BomberLib
         public void ConnectHandler(TcpClient client)
         {
             this.com.send(client, "YourId", client.Client.GetHashCode().ToString());
+        }
+
+        /// <summary>
+        /// loads the player models from file
+        /// </summary>
+        public void loadPlayerModels()
+        {
+            // define path
+            string modelPath = "models";
+
+            // get files in models directory
+            string[] files = Directory.GetFiles(modelPath);
+
+            // clear dictionary
+            models.Clear();
+
+            // loop files
+            foreach (string file in files)
+            {
+                // load image
+                Image img = Image.FromFile(file);
+
+                String[] splitted = file.Split(Path.DirectorySeparatorChar);
+
+                string rawFileName = splitted[splitted.Length -1];
+
+                // image name
+                string imageName = rawFileName.Substring(0, rawFileName.Length-4);
+
+                // convert to string
+                MemoryStream memory = new MemoryStream();
+                img.Save(memory, ImageFormat.Png);
+                string imageEncoded = Convert.ToBase64String(memory.ToArray());
+                memory.Close();
+
+                // add to dictionary
+                models.Add(imageName, imageEncoded);
+            }
+        }
+
+
+        /// <summary>
+        /// parses model list to a string
+        /// </summary>
+        /// <returns></returns>
+        private string getModelList()
+        {
+            string modelList = "";
+
+            foreach (KeyValuePair<string, string> model in models)
+            {
+                modelList += model.Key+":"+model.Value+";";
+            }
+
+            return modelList;
         }
     }
 }

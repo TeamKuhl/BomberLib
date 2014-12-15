@@ -28,6 +28,9 @@ namespace BomberLib
         // tcpsocketid
         public int socketID = 0;
 
+        // imagestring
+        public string image;
+
         // position
         public int X, Y;
 
