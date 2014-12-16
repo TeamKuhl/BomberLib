@@ -150,8 +150,13 @@ namespace BomberLib
         /// <param name="message"></param>
         public void sendToAll(string type, string message)
         {
-            // use communication library 
-            server.sendToAll(type, message);
+            try
+            {
+                // use communication library 
+                server.sendToAll(type, message);
+            }
+            catch (Exception e) { e.GetType(); }
+
         }
 
         /// <summary>
