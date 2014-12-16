@@ -134,7 +134,11 @@ namespace BomberLib
                 this.deaths++;
 
                 // no kill points for suiciders
-                if (playerID != this.socketID) onPlayerKill(playerID);
+                if (playerID != this.socketID)
+                {
+                    if(this.onPlayerKill != null) onPlayerKill(playerID);
+
+                }
                 else this.score--;
 
                 // update score

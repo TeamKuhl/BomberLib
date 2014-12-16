@@ -198,6 +198,7 @@ namespace BomberLib
         {
             this.players[killerID].kills++;
             this.players[killerID].score++;
+            this.players[killerID].sendScoreToAll();
         }
 
         /// <summary>
