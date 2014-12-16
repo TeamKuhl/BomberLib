@@ -63,7 +63,7 @@ namespace BomberLib
             this.players[client.Client.GetHashCode()].setStatus(2);
 
             // default cow
-            this.players[client.Client.GetHashCode()].image = models["Blue Cow"];
+            this.players[client.Client.GetHashCode()].image = models["Cow"];
 
             // listen to dead
             this.players[client.Client.GetHashCode()].onPlayerDied += new PlayerDiedHandler(PlayerDiedHandler);
