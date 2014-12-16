@@ -42,7 +42,8 @@ namespace BomberLib
             this.com.onSetPlayerStatus      += new ComMessageHandler(SetPlayerStatusHandler);
             this.com.onGetPlayerModel       += new ComMessageHandler(GetPlayerModelHandler);
             this.com.onGetModelList         += new ComMessageHandler(GetModelListHandler);
-            this.com.onSetPlayerModel       += new ComMessageHandler(SetPlayerModelHanlder);
+            this.com.onSetPlayerModel       += new ComMessageHandler(SetPlayerModelHandler);
+            this.com.onGetPlayerScore       += new ComMessageHandler(GetPlayerScoreHandler);
             
         }
 
@@ -66,6 +67,9 @@ namespace BomberLib
 
             // listen to dead
             this.players[client.Client.GetHashCode()].onPlayerDied += new PlayerDiedHandler(PlayerDiedHandler);
+
+            // listen to kills
+            this.players[client.Client.GetHashCode()].onPlayerKill += new PlayerKillHandler(PlayerKillHandler);
 
             // listen to change
             this.players[client.Client.GetHashCode()].onPlayerChange += new PlayerChangeHandler(PlayerChangeHandler);
@@ -135,6 +139,18 @@ namespace BomberLib
         }
 
         /// <summary>
+        /// Hanlde Player score requests
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
+        public void GetPlayerScoreHandler(TcpClient client, String message)
+        {
+            int playerID = Convert.ToInt32(message);
+
+            this.players[playerID].sendScoreTo(client);
+        }
+
+        /// <summary>
         /// Handles SetPlayerStatus requests
         /// </summary>
         /// <param name="client"></param>
@@ -174,17 +190,42 @@ namespace BomberLib
             }
         }
 
+        /// <summary>
+        /// Handles player kills for score
+        /// </summary>
+        /// <param name="killerID"></param>
+        public void PlayerKillHandler(int killerID)
+        {
+            this.players[killerID].kills++;
+            this.players[killerID].score++;
+        }
+
+        /// <summary>
+        /// Handles player model requests
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
         public void GetPlayerModelHandler(TcpClient client, string message)
         {
             this.com.send(client, "PlayerModel", message+":"+players[Convert.ToInt32(message)].image);
         }
 
+        /// <summary>
+        /// Handles model list requests
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
         public void GetModelListHandler(TcpClient client, string message)
         {
             this.com.send(client, "ModelList", getModelList());
         }
 
-        public void SetPlayerModelHanlder(TcpClient client, string message)
+        /// <summary>
+        /// Handles player model sets
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
+        public void SetPlayerModelHandler(TcpClient client, string message)
         {
             int id = client.Client.GetHashCode();
 

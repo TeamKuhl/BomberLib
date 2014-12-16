@@ -38,6 +38,7 @@ namespace BomberLib
         public ComMessageHandler onGetPlayerModel;
         public ComMessageHandler onGetModelList;
         public ComMessageHandler onSetPlayerModel;
+        public ComMessageHandler onGetPlayerScore;
 
         // else
         public ComUnknownTypeHandler onUnknownType;
@@ -115,6 +116,9 @@ namespace BomberLib
                 case "SetPlayerModel":
                     if (onSetPlayerModel != null) onSetPlayerModel(client, message);
                     break;
+                case "GetPlayerScore":
+                    if (onGetPlayerScore != null) onGetPlayerScore(client, message);
+                    break;
                 default:
                     if (onUnknownType != null) onUnknownType(client, type, message);
                     break;
@@ -146,13 +150,8 @@ namespace BomberLib
         /// <param name="message"></param>
         public void sendToAll(string type, string message)
         {
-            // temporary try catch
-            try
-            {
-                // use communication library 
-                server.sendToAll(type, message);
-            }
-            catch (Exception e) {  }
+            // use communication library 
+            server.sendToAll(type, message);
         }
 
         /// <summary>

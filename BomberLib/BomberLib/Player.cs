@@ -11,6 +11,7 @@ namespace BomberLib
 
     // dead event for game class
     public delegate void PlayerDiedHandler();
+    public delegate void PlayerKillHandler(int playerID);
 
     public class Player
     {
@@ -21,6 +22,7 @@ namespace BomberLib
         // events
         public PlayerDiedHandler onPlayerDied;
         public PlayerChangeHandler onPlayerChange;
+        public PlayerKillHandler onPlayerKill;
 
         // playername
         public string name = "";
@@ -30,6 +32,11 @@ namespace BomberLib
 
         // imagestring
         public string image;
+
+        // score
+        public int score = 0;
+        public int kills = 0;
+        public int deaths = 0;
 
         // position
         public int X, Y;
@@ -123,6 +130,16 @@ namespace BomberLib
                 // set position
                 this.setStatus(2);
 
+                // moa deaaad
+                this.deaths++;
+
+                // no kill points for suiciders
+                if (playerID != this.socketID) onPlayerKill(playerID);
+                else this.score--;
+
+                // update score
+                this.sendScoreToAll();
+
                 // send this
                 this.com.sendToAll("PlayerDied", this.socketID + ":" + playerID);
 
@@ -131,6 +148,20 @@ namespace BomberLib
             }
         }
 
+        /// <summary>
+        /// send score to all on change
+        /// </summary>
+        public void sendScoreToAll()
+        {
+            string scoreMessage = this.socketID + ":" + this.score + ":" + this.kills + ":" + this.deaths;
+            this.com.sendToAll("PlayerScore", scoreMessage);
+        }
+
+        public void sendScoreTo(TcpClient client)
+        {
+            string scoreMessage = this.socketID + ":" + this.score + ":" + this.kills + ":" + this.deaths;
+            this.com.send(client, "PlayerScore", scoreMessage);
+        }
 
 
 

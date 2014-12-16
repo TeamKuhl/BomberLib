@@ -173,6 +173,10 @@ namespace BomberLib
                         // set last player to waiting
                         ph.players[winner.socketID].setStatus(2);
 
+                        // change score and update
+                        ph.players[winner.socketID].score += 3;
+                        ph.players[winner.socketID].sendScoreToAll();
+
                         // tell the winner
                         this.com.sendToAll("PlayerWin", winner.socketID.ToString());
 
