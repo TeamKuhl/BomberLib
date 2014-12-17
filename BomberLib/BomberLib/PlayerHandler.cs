@@ -56,7 +56,6 @@ namespace BomberLib
         {
             // output
             Console.WriteLine("Player " + message + " connected [#" + client.Client.GetHashCode() + "]");
-            this.com.sendToAll("Join", Convert.ToString(client.Client.GetHashCode()) + ":" + message);
 
             // create player
             this.players[client.Client.GetHashCode()] = new Player(message, client, com);
@@ -64,6 +63,9 @@ namespace BomberLib
 
             // default cow
             this.players[client.Client.GetHashCode()].image = models["Cow"];
+
+
+            this.com.sendToAll("Join", Convert.ToString(client.Client.GetHashCode()) + ":" + message);
 
             // listen to dead
             this.players[client.Client.GetHashCode()].onPlayerDied += new PlayerDiedHandler(PlayerDiedHandler);
@@ -232,8 +234,7 @@ namespace BomberLib
 
             if (models.ContainsKey(message))
             {
-                this.players[id].image = models[message];
-                this.com.sendToAll("PlayerModel", id + ":" + this.players[id].image);
+                this.players[id].switchModel(models[message]);
             }
         }
 

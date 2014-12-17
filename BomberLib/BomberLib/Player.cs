@@ -47,6 +47,7 @@ namespace BomberLib
         public int curamount = 0;
         public int time = 3;
         public int speed = 100;
+        public int modelChangeSpeed = 1000;
 
         // statuscode
         // [1: playing, 2: waiting, 3: spectating]
@@ -54,6 +55,7 @@ namespace BomberLib
 
         // stopwatch for speed
         private Stopwatch SpeedLimit;
+        private Stopwatch ModelChangeLimit;
         
         /// <summary>
         ///     Create new player object
@@ -92,6 +94,26 @@ namespace BomberLib
                 this.com.sendToAll("PlayerPosition", this.socketID + ":" + this.X + ":" + this.Y);
 
                 return true;
+            }
+            else return false;
+        }
+
+        public Boolean switchModel(String base64image)
+        {
+            if (this.status == 1)
+            {
+                if (ModelChangeLimit == null || ModelChangeLimit.ElapsedMilliseconds > modelChangeSpeed)
+                {
+                    if (ModelChangeLimit != null) ModelChangeLimit.Stop();
+
+                    this.image = base64image;
+                    this.com.sendToAll("PlayerModel", this.socketID + ":" + this.image);
+
+                    ModelChangeLimit = Stopwatch.StartNew();
+
+                    return true;
+                }
+                else return false;
             }
             else return false;
         }
