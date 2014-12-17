@@ -39,6 +39,7 @@ namespace BomberLib
         public ComMessageHandler onGetModelList;
         public ComMessageHandler onSetPlayerModel;
         public ComMessageHandler onGetPlayerScore;
+        public ComMessageHandler onGetTextures;
 
         // else
         public ComUnknownTypeHandler onUnknownType;
@@ -118,6 +119,9 @@ namespace BomberLib
                     break;
                 case "GetPlayerScore":
                     if (onGetPlayerScore != null) onGetPlayerScore(client, message);
+                    break;
+                case "GetTextures":
+                    if (onGetTextures != null) onGetTextures(client, message);
                     break;
                 default:
                     if (onUnknownType != null) onUnknownType(client, type, message);

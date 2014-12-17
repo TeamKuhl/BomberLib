@@ -45,6 +45,7 @@ namespace BomberLib
             this.com.onSetPlayerModel       += new ComMessageHandler(SetPlayerModelHandler);
             this.com.onGetPlayerScore       += new ComMessageHandler(GetPlayerScoreHandler);
             
+            
         }
 
         /// <summary>

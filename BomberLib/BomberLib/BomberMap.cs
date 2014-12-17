@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace BomberLib
 {
@@ -17,6 +19,8 @@ namespace BomberLib
         private String name = "";
         private String rawMap;
 
+        private Dictionary<string, string> textures = new Dictionary<string,string>();
+
         private Communication com;
 
         // initialization: loads the map from file
@@ -27,9 +31,13 @@ namespace BomberLib
 
             // load map
             this.loadMapFromFile(MapName);
+
+            // load textures
+            this.loadTextures();
             
             // start getmap listener
             this.com.onGetMap += new ComMessageHandler(GetMapHandler);
+            this.com.onGetTextures += new ComMessageHandler(GetTexturesHandler);
 
             // listen on player position events
 
@@ -220,6 +228,60 @@ namespace BomberLib
             // return this positions
             return randomPositions.ToList<string>();
         }
+
+        public void loadTextures()
+        {
+            // define path
+            string texturePath = "textures";
+
+            // get files in models directory
+            string[] files = Directory.GetFiles(texturePath);
+
+            // clear dictionary
+            textures.Clear();
+
+            // loop files
+            foreach (string file in files)
+            {
+                // load image
+                Image img = Image.FromFile(file);
+
+                String[] splitted = file.Split(Path.DirectorySeparatorChar);
+
+                string rawFileName = splitted[splitted.Length - 1];
+
+                // image name
+                string imageName = rawFileName.Substring(0, rawFileName.Length - 4);
+
+                // convert to string
+                MemoryStream memory = new MemoryStream();
+                img.Save(memory, ImageFormat.Png);
+                string imageEncoded = Convert.ToBase64String(memory.ToArray());
+                memory.Close();
+
+                // add to dictionary
+                textures.Add(imageName, imageEncoded);
+            }
+        }
+
+        public void GetTexturesHandler(TcpClient client, string message)
+        {
+            string textureList = this.getTextureList();
+            this.com.send(client, "Textures", textureList);
+        }
+
+        private string getTextureList()
+        {
+            string textureList = "";
+
+            foreach (KeyValuePair<string, string> texture in textures)
+            {
+                textureList += texture.Key + ":" + texture.Value + ";";
+            }
+
+            return textureList;
+        }
+
 
         /// <summary>
         /// Get type of map tile on position X, Y
