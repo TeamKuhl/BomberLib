@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BomberLib.Bomb">
+    <Position X="7.25" Y="7.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAgAAAAAAAAAIAAAAAAAAgAAAAEAAAAAAAAYAA=</HashCode>
+      <FileName>Bomb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BomberLib.BomberMap">
+    <Position X="5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>QiACARAABECgAAQAQAAAARAAGAAkQAIEAAAAAAAAAAA=</HashCode>
+      <FileName>BomberMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BomberLib.BombHandler">
+    <Position X="5" Y="8.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAQQAAAAgAAAAAAAAAAIAAAEA=</HashCode>
+      <FileName>BombHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BomberLib.Chat">
+    <Position X="2.75" Y="8.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQIgAAAAAAAAA=</HashCode>
+      <FileName>Chat.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BomberLib.Communication">
+    <Position X="0.5" Y="2.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AkAEAAgQIAAASAICCBBAIAAAAAABAACQBACIAAAMAII=</HashCode>
+      <FileName>Communication.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BomberLib.Config">
+    <Position X="2.75" Y="6.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAQAQAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Config.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BomberLib.Game">
+    <Position X="2.75" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IBAGAAAAAAABQAQwAAAAAQAARAAEIEQAAAAIAIAABAI=</HashCode>
+      <FileName>Game.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BomberLib.MapTile">
+    <Position X="5" Y="6.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAAAABgAAAAAAA=</HashCode>
+      <FileName>MapTile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BomberLib.Player">
+    <Position X="7.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>EAQDAIAIAiQoAAAAAIAIAQACEAAEAUAAAAQGJAIBYAA=</HashCode>
+      <FileName>Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BomberLib.PlayerHandler">
+    <Position X="9.25" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IAAFECBwAEAgQABAAQgEAwgAAACAAAiAIBQAgAAJAAA=</HashCode>
+      <FileName>PlayerHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
